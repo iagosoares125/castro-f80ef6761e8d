@@ -266,15 +266,19 @@ const D = {"grupos":[["pisos","Pisos e Revestimentos"],["banheiro","Banheiro"],[
     const m = atual(); if (!m) return; msg('');
     const arq = prontos.get(m.id);
     if (!arq) { msg('Ainda preparando o arquivo. Espere o botão ficar ativo e toque de novo.'); return; }
+    // 1) menu Compartilhar do Android com o arquivo: escolha "Canva" e o app importa a arte sozinho
+    let motivo = '';
     try {
-      if (!(navigator.canShare && navigator.canShare({ files: [arq] }))) throw new Error('sem-share');
-      await navigator.share({ files: [arq], title: m.nome });
-    } catch (e) {
-      if (e && e.name === 'AbortError') return;
-      baixarLink(pptxUrl(m.id), arq.name);
-      msg('O menu do Android não abriu. Baixei o arquivo (pasta Downloads): no Canva, toque em Criar > Enviar arquivo e escolha o .pptx.');
-      setTimeout(abrirAppCanva, 2500);
-    }
+      if (!navigator.share) motivo = 'este navegador não tem o menu Compartilhar';
+      else if (!(navigator.canShare && navigator.canShare({ files: [arq] }))) motivo = 'o navegador não aceita compartilhar este tipo de arquivo';
+      else { await navigator.share({ files: [arq], title: m.nome }); return; }
+    } catch (e) { if (e && e.name === 'AbortError') return; motivo = `${e && e.name}: ${e && e.message}`; }
+    // 2) abre o arquivo DIRETO no app do Canva (Android). Se o app não aceitar/estiver ausente, o navegador baixa o .pptx.
+    msg(`Compartilhar não funcionou (${motivo}). Tentando abrir direto no app do Canva…`);
+    if (/android/i.test(navigator.userAgent)) {
+      const u = new URL(pptxUrl(m.id), location.href);
+      location.href = `intent://${u.host}${u.pathname}#Intent;scheme=https;action=android.intent.action.VIEW;type=${PPTX_TIPO};package=com.canva.editor;S.browser_fallback_url=${encodeURIComponent(u.href)};end`;
+    } else baixarLink(pptxUrl(m.id), arq.name);
   };
   $('#btCanva2').onclick = () => {
     const m = atual(); if (!m) return;
