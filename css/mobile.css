@@ -73,3 +73,4 @@ body{min-height:100dvh;background:var(--page-bg)}
 #aviso{bottom:calc(86px + var(--safe-b));width:calc(100% - 28px)}
 .msg{font-size:13px;color:var(--accent);font-weight:500;min-height:1.2em}
 .modal[hidden]{display:none}
+.prim-pulso{background:var(--accent-fill)!important;color:#fff!important;border-color:var(--accent-fill)!important;font-weight:700!important}

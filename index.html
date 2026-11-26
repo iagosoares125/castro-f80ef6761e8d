@@ -37,8 +37,8 @@
       <p class="prod" id="infoProd"></p>
       <div class="acoes">
         <button id="btCanva" class="bt canva">Abrir no Canva</button>
-        <p class="dica">Abre o menu do Android: escolha <b>Canva</b>. A arte chega com os textos editáveis.</p>
-        <button id="btCanva2" class="bt peq">Não apareceu o Canva? Baixar e abrir o app</button>
+        <p class="dica">Baixa a arte editável (.pptx) e abre o app do Canva. Lá: <b>+ &gt; Enviar arquivo</b> e escolha o arquivo baixado.</p>
+        <button id="btCanva2" class="bt peq">2º passo: abrir o app do Canva</button>
         <div class="rot2">Exportar</div>
         <div class="fmts">
           <button class="bt" data-fmt="jpg">JPG<small>1080×1440, para postar</small></button>
@@ -218,19 +218,8 @@ const D = {"grupos":[["pisos","Pisos e Revestimentos"],["banheiro","Banheiro"],[
 
   // ───────── Detalhe ─────────
   const atual = () => E.lista[E.atual];
-  const arquivos = new Map(); // id -> Promise<File> do .pptx, baixado de antemão: o menu Compartilhar do Android exige toque "fresco" (sem await de rede)
   const PPTX_TIPO = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
   const nomeArq = (m) => slug(m.id + '-' + m.nome);
-  const prontos = new Map(); // id -> File já carregado
-  function pegarPPTX(m) {
-    if (!arquivos.has(m.id)) {
-      const p = fetch(pptxUrl(m.id)).then((r) => { if (!r.ok) throw new Error('arquivo não encontrado'); return r.blob(); })
-        .then((b) => { const f = new File([b], nomeArq(m) + '.pptx', { type: PPTX_TIPO }); prontos.set(m.id, f); return f; });
-      p.catch(() => arquivos.delete(m.id)); arquivos.set(m.id, p);
-      while (arquivos.size > 4) { const k = arquivos.keys().next().value; arquivos.delete(k); prontos.delete(k); }
-    }
-    return arquivos.get(m.id);
-  }
   function abrir(lista, i) {
     if (i < 0 || i >= lista.length) return;
     E.lista = lista; E.atual = i; const m = lista[i];
@@ -242,11 +231,6 @@ const D = {"grupos":[["pisos","Pisos e Revestimentos"],["banheiro","Banheiro"],[
     const im = $('#dImg'); im.src = mini(m.id); im.alt = `${m.id} ${m.nome}`;
     const grande = new Image(); grande.onload = () => { if (atual() === m) im.src = grande.src; }; grande.src = cheia(m.id);
     $('#btAnt').disabled = i === 0; $('#btProx').disabled = i === lista.length - 1;
-    const b = $('#btCanva');
-    if (prontos.has(m.id)) { b.disabled = false; b.textContent = 'Abrir no Canva'; return; }
-    b.disabled = true; b.textContent = 'Preparando o arquivo…';
-    pegarPPTX(m).then(() => { if (atual() === m) { b.disabled = false; b.textContent = 'Abrir no Canva'; } },
-      () => { if (atual() === m) { b.disabled = false; b.textContent = 'Abrir no Canva'; msg('Sem internet ou arquivo indisponível. Tente de novo.'); } });
   }
   function fechar() { $('#detalhe').hidden = true; document.body.style.overflow = ''; E.atual = -1; }
   $('#btFechar').onclick = () => { if (history.state && history.state.det) history.back(); else fechar(); };
@@ -256,35 +240,20 @@ const D = {"grupos":[["pisos","Pisos e Revestimentos"],["banheiro","Banheiro"],[
 
   const baixarLink = (url, nome) => { const a = el('a', { href: url, download: nome }); document.body.append(a); a.click(); a.remove(); };
   const baixarBlob = (blob, nome) => { const u = URL.createObjectURL(blob); baixarLink(u, nome); setTimeout(() => URL.revokeObjectURL(u), 10000); };
-  function abrirAppCanva() {
-    if (/android/i.test(navigator.userAgent)) location.href = 'intent://www.canva.com/#Intent;scheme=https;package=com.canva.editor;S.browser_fallback_url=' + encodeURIComponent('https://www.canva.com/') + ';end';
-    else window.open('https://www.canva.com/', '_blank', 'noopener');
-  }
 
-  // ABRIR NO CANVA: o .pptx já está carregado, então o menu Compartilhar abre NO MESMO TOQUE (sem esperar rede): é isso que evita o "Permission denied".
-  $('#btCanva').onclick = async () => {
-    const m = atual(); if (!m) return; msg('');
-    const arq = prontos.get(m.id);
-    if (!arq) { msg('Ainda preparando o arquivo. Espere o botão ficar ativo e toque de novo.'); return; }
-    // 1) menu Compartilhar do Android com o arquivo: escolha "Canva" e o app importa a arte sozinho
-    let motivo = '';
-    try {
-      if (!navigator.share) motivo = 'este navegador não tem o menu Compartilhar';
-      else if (!(navigator.canShare && navigator.canShare({ files: [arq] }))) motivo = 'o navegador não aceita compartilhar este tipo de arquivo';
-      else { await navigator.share({ files: [arq], title: m.nome }); return; }
-    } catch (e) { if (e && e.name === 'AbortError') return; motivo = `${e && e.name}: ${e && e.message}`; }
-    // 2) abre o arquivo DIRETO no app do Canva (Android). Se o app não aceitar/estiver ausente, o navegador baixa o .pptx.
-    msg(`Compartilhar não funcionou (${motivo}). Tentando abrir direto no app do Canva…`);
-    if (/android/i.test(navigator.userAgent)) {
-      const u = new URL(pptxUrl(m.id), location.href);
-      location.href = `intent://${u.host}${u.pathname}#Intent;scheme=https;action=android.intent.action.VIEW;type=${PPTX_TIPO};package=com.canva.editor;S.browser_fallback_url=${encodeURIComponent(u.href)};end`;
-    } else baixarLink(pptxUrl(m.id), arq.name);
+  // ABRIR NO CANVA. O Chrome do Android NÃO deixa compartilhar .pptx pelo menu Compartilhar (só imagem, vídeo, áudio, texto e PDF): dá "NotAllowedError".
+  // Por isso: baixa o .pptx (vai para Downloads) e abre o APP do Canva; lá, Criar/+ > Enviar (upload) > escolher o arquivo.
+  const abrirAppCanva = () => {
+    if (/android/i.test(navigator.userAgent)) location.href = 'intent://www.canva.com/#Intent;scheme=https;package=com.canva.editor;S.browser_fallback_url=' + encodeURIComponent('market://details?id=com.canva.editor') + ';end'; // sem o app: abre a página dele na Play Store (mostra Instalar/Abrir)
+    else window.open('https://www.canva.com/', '_blank', 'noopener');
   };
-  $('#btCanva2').onclick = () => {
+  const instrucao = (m) => `Arquivo "${nomeArq(m)}.pptx" baixado (pasta Downloads). Agora toque em "2º passo: abrir o app do Canva". No Canva: toque em + (Criar) > Enviar arquivo (Upload) > escolha esse arquivo.`;
+  $('#btCanva').onclick = () => {
     const m = atual(); if (!m) return;
-    baixarLink(pptxUrl(m.id), nomeArq(m) + '.pptx');
-    msg('Arquivo baixado (pasta Downloads). No Canva: Criar > Enviar arquivo > escolha o .pptx.'); setTimeout(abrirAppCanva, 2500);
+    baixarLink(pptxUrl(m.id), nomeArq(m) + '.pptx'); msg(instrucao(m));
+    $('#btCanva2').scrollIntoView({ block: 'center', behavior: 'smooth' }); $('#btCanva2').classList.add('prim-pulso');
   };
+  $('#btCanva2').onclick = () => { const m = atual(); if (m) msg(instrucao(m)); abrirAppCanva(); };
 
   async function buscar(url) { const r = await fetch(url); if (!r.ok) throw new Error('arquivo não encontrado'); return r.blob(); }
   async function comoPNG(jpg) {
