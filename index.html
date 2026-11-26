@@ -36,9 +36,9 @@
       <p class="obj" id="infoObj"></p>
       <p class="prod" id="infoProd"></p>
       <div class="acoes">
-        <button id="btCanva" class="bt canva">Abrir no Canva</button>
-        <p class="dica">Baixa a arte editável (.pptx) e abre o app do Canva. Lá: <b>+ &gt; Enviar arquivo</b> e escolha o arquivo baixado.</p>
-        <button id="btCanva2" class="bt peq">2º passo: abrir o app do Canva</button>
+        <button id="btCanva" class="bt canva">Editar no Canva</button>
+        <p class="dica">Baixa a arte editável e abre o app do Canva. Lá: <b>+ &gt; Enviar arquivo</b> e escolha o arquivo baixado.</p>
+        <button id="btCanva2" class="bt peq">O app do Canva não abriu? Toque aqui</button>
         <div class="rot2">Exportar</div>
         <div class="fmts">
           <button class="bt" data-fmt="jpg">JPG<small>1080×1440, para postar</small></button>
@@ -247,11 +247,12 @@ const D = {"grupos":[["pisos","Pisos e Revestimentos"],["banheiro","Banheiro"],[
     if (/android/i.test(navigator.userAgent)) location.href = 'intent://www.canva.com/#Intent;scheme=https;package=com.canva.editor;S.browser_fallback_url=' + encodeURIComponent('market://details?id=com.canva.editor') + ';end'; // sem o app: abre a página dele na Play Store (mostra Instalar/Abrir)
     else window.open('https://www.canva.com/', '_blank', 'noopener');
   };
-  const instrucao = (m) => `Arquivo "${nomeArq(m)}.pptx" baixado (pasta Downloads). Agora toque em "2º passo: abrir o app do Canva". No Canva: toque em + (Criar) > Enviar arquivo (Upload) > escolha esse arquivo.`;
+  const instrucao = (m) => `"${nomeArq(m)}.pptx" está em Downloads. No Canva: + (Criar) > Enviar arquivo > escolha esse arquivo.`;
+  // Um toque só: baixa o arquivo e abre o app (o mesmo toque autoriza as duas coisas)
   $('#btCanva').onclick = () => {
     const m = atual(); if (!m) return;
     baixarLink(pptxUrl(m.id), nomeArq(m) + '.pptx'); msg(instrucao(m));
-    $('#btCanva2').scrollIntoView({ block: 'center', behavior: 'smooth' }); $('#btCanva2').classList.add('prim-pulso');
+    abrirAppCanva();
   };
   $('#btCanva2').onclick = () => { const m = atual(); if (m) msg(instrucao(m)); abrirAppCanva(); };
 
