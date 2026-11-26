@@ -1,0 +1,86 @@
+/* Tokens copiados do projeto Site (Castro/Site/src/assets/css/castro.css): mesmas cores, formas e 3 temas (azul, claro, escuro).
+   Se o Site mudar, copiar de novo (ferramentas/painel/tokens_site.py). */
+:root{
+  color-scheme:dark;
+  /* Marca */
+  --navy-950:#000F20;--navy-900:#001830;--navy-800:#00203F;--blue-700:#00357A;--blue-600:#004A9E;
+  --blue-500:#005FAC;--blue-400:#3395D4;
+  --red:#E63A30;--red-soft:rgba(230,58,48,.14);
+  --silver:#C5C6CB;
+  /* Acento = vermelho da marca. --accent: texto/ícones sobre o azul (contraste AA);
+     --accent-fill: fundos com texto branco (contraste 5:1); --red: grafismos */
+  --accent:#FF8C85;--accent-soft:rgba(230,58,48,.16);--accent-line:rgba(230,58,48,.48);--accent-fill:#D0302A;--accent-deep:#9E2019;
+  --green:#2DD486;--green-soft:rgba(45,212,134,.13);
+  --closed:#FF7A74;
+  /* Vidro */
+  --glass-1:rgba(255,255,255,.06);--glass-2:rgba(255,255,255,.10);--glass-3:rgba(255,255,255,.15);
+  --line:rgba(255,255,255,.11);--line-strong:rgba(255,255,255,.28);
+  /* Texto */
+  --t1:#fff;--t2:rgba(255,255,255,.72);--t3:rgba(255,255,255,.56);
+  /* Forma */
+  --r-lg:18px;--r-md:14px;--r-sm:10px;--r-pill:999px;
+  --shadow:0 14px 34px rgba(0,0,0,.30);
+  /* Movimento */
+  --spring:cubic-bezier(.34,1.56,.64,1);--out:cubic-bezier(.22,1,.36,1);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+
+:root,[data-theme="azul"]{
+  --page-bg:#001A33;
+  --bg-grad:linear-gradient(168deg,#001A33 0%,#003366 32%,#005FAC 68%,#00427A 100%);
+  --orb-1:rgba(0,110,200,.34);--orb-2:rgba(230,58,48,.16);
+  --aurora-1:rgba(0,120,220,.42);--aurora-2:rgba(51,149,212,.28);--aurora-3:rgba(230,58,48,.17);
+  --roofs-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='68'%3E%3Cpolyline points='8,48 50,14 92,48' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --roofs-opacity:.045;--grain-opacity:.05;
+  --icon-muted:#C5C6CB;
+  --sunken:rgba(0,0,0,.22);--sunken-strong:rgba(0,0,0,.32);
+  --sheen:rgba(255,255,255,.07);--ripple:rgba(255,255,255,.14);--spot:rgba(255,255,255,.075);--cursor:rgba(255,255,255,.55);
+  --bar-bg:rgba(0,24,48,.78);--popover-bg:rgba(0,26,54,.97);--pop-shadow:rgba(0,0,0,.45);
+  --overlay:rgba(0,10,25,.66);--sheet-bg:linear-gradient(170deg,#00357A,#00244F 60%);
+  --idcard-bg:linear-gradient(155deg,rgba(255,255,255,.14),rgba(255,255,255,.04));
+  --step-bg:rgba(0,28,60,.75);--step-n-bg:#00203F;--option-bg:#00203F;
+  --bp-1:rgba(130,190,255,.10);--bp-2:rgba(130,190,255,.05);
+  --statement-dim:rgba(255,255,255,.28);--marker:rgba(230,58,48,.75);
+  --card-shadow:none;--theme-color:#001A33;
+}
+[data-theme="claro"]{
+  color-scheme:light;
+  --page-bg:#F4F6F9;
+  --bg-grad:linear-gradient(168deg,#FFFFFF 0%,#F4F7FB 45%,#E8EEF6 100%);
+  --orb-1:rgba(0,96,176,.10);--orb-2:rgba(230,58,48,.08);
+  --aurora-1:rgba(0,96,176,.10);--aurora-2:rgba(51,149,212,.08);--aurora-3:rgba(230,58,48,.07);
+  --roofs-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='68'%3E%3Cpolyline points='8,48 50,14 92,48' fill='none' stroke='%23005FAC' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --roofs-opacity:.05;--grain-opacity:.025;
+  --t1:#373435;--t2:#4A4748;--t3:#5F5C5D;
+  --glass-1:#FFFFFF;--glass-2:#F7F9FC;--glass-3:#EEF2F8;
+  --line:rgba(0,48,110,.12);--line-strong:rgba(0,48,110,.24);
+  --accent:#C8281F;--accent-soft:rgba(230,58,48,.09);--accent-line:rgba(230,58,48,.38);
+  --green:#0B7A45;--green-soft:rgba(11,122,69,.10);--closed:#C62828;
+  --icon-muted:#55657A;
+  --sunken:#EEF2F7;--sunken-strong:#E6ECF4;
+  --sheen:rgba(255,255,255,.7);--ripple:rgba(0,48,110,.10);--spot:rgba(0,96,176,.06);--cursor:rgba(0,48,110,.45);
+  --bar-bg:rgba(255,255,255,.86);--popover-bg:#FFFFFF;--pop-shadow:rgba(0,32,63,.18);
+  --overlay:rgba(11,31,58,.40);--sheet-bg:#FFFFFF;
+  --idcard-bg:linear-gradient(155deg,#FFFFFF,#F1F5FA);
+  --step-bg:#FFFFFF;--step-n-bg:#FFFFFF;--option-bg:#FFFFFF;
+  --bp-1:rgba(0,80,160,.09);--bp-2:rgba(0,80,160,.045);
+  --statement-dim:rgba(11,31,58,.25);--marker:rgba(230,58,48,.30);
+  --card-shadow:0 1px 2px rgba(0,32,63,.05),0 6px 18px rgba(0,32,63,.06);--theme-color:#FFFFFF;
+}
+[data-theme="escuro"]{
+  --page-bg:#09090A;
+  --bg-grad:linear-gradient(168deg,#070708 0%,#111012 45%,#1B1A1C 100%);
+  --orb-1:rgba(0,96,176,.16);--orb-2:rgba(230,58,48,.20);
+  --aurora-1:rgba(230,58,48,.16);--aurora-2:rgba(0,96,176,.14);--aurora-3:rgba(230,58,48,.10);
+  --roofs-opacity:.035;--grain-opacity:.06;
+  --t2:rgba(255,255,255,.72);--t3:rgba(255,255,255,.56);
+  --glass-1:rgba(255,255,255,.045);--glass-2:rgba(255,255,255,.08);--glass-3:rgba(255,255,255,.12);
+  --line:rgba(255,255,255,.09);--line-strong:rgba(255,255,255,.22);
+  --accent:#FF7A72;
+  --bar-bg:rgba(7,9,12,.80);--popover-bg:rgba(16,19,25,.98);--overlay:rgba(0,0,0,.70);
+  --sheet-bg:linear-gradient(170deg,#161A21,#0B0E13 60%);
+  --idcard-bg:linear-gradient(155deg,rgba(255,255,255,.10),rgba(255,255,255,.03));
+  --step-bg:rgba(12,15,20,.85);--step-n-bg:#0B0E13;--option-bg:#0B0E13;
+  --bp-1:rgba(230,58,48,.10);--bp-2:rgba(255,255,255,.04);
+  --theme-color:#09090A;
+}

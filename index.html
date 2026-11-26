@@ -1,346 +1,326 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="azul">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#005FAC">
+<meta name="theme-color" content="#001A33">
+<title>Repositório Castro</title>
+<link rel="icon" href="marca/logos/avatar.png">
+<link rel="stylesheet" href="css/tokens-site.css">
+<link rel="stylesheet" href="css/painel.css">
+<link rel="stylesheet" href="css/mobile.css">
 </head>
 <body>
-<title>Repositório Castro</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;700&display=swap">
-<style>
-/* Layout: moldura de painel com abas (Modelos, Feed, Marca); as artes 3:4 são o conteúdo e a página só as emoldura. */
-:root {
-  --azul: #005FAC; --azul-esc: #003E73; --verm: #E63A30; --prata: #C5C6CB;
-  --bg: #EEF2F7; --surf: #FFFFFF; --surf2: #E4EAF2; --txt: #0C2238; --mut: #55677B; --linha: #D3DCE7;
-  --acento: #005FAC; --acento-txt: #FFFFFF; --sombra: 0 1px 2px rgba(12,34,56,.08), 0 8px 24px rgba(12,34,56,.07);
-  --fonte: 'Fira Sans', 'Segoe UI', system-ui, sans-serif;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #071827; --surf: #0D2640; --surf2: #12324F; --txt: #E8EFF7; --mut: #93A8BF; --linha: #1D4166;
-    --acento: #4DA3E8; --acento-txt: #04182B; --sombra: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.35);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #071827; --surf: #0D2640; --surf2: #12324F; --txt: #E8EFF7; --mut: #93A8BF; --linha: #1D4166;
-  --acento: #4DA3E8; --acento-txt: #04182B; --sombra: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.35);
-  color-scheme: dark;
-}
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--txt); font-family: var(--fonte); font-size: 15px; line-height: 1.45;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-.wrap { max-width: 1180px; margin: 0 auto; padding-block: 20px 56px; }
-button { font: inherit; color: inherit; cursor: pointer; }
-:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
-
-.topo { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; justify-content: space-between; }
-.marca { display: flex; align-items: center; gap: 12px; }
-.marca .c { width: 44px; height: 44px; border-radius: 12px; background: var(--azul); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 26px; position: relative; overflow: hidden; }
-.marca .c::after { content: ""; position: absolute; right: -6px; bottom: -6px; width: 22px; height: 22px; background: var(--verm); transform: rotate(45deg); }
-.marca h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -.01em; text-wrap: balance; }
-.marca small { display: block; color: var(--mut); font-size: 13px; }
-.abas { display: flex; gap: 4px; background: var(--surf2); padding: 4px; border-radius: 12px; }
-.abas button { border: 0; background: transparent; padding: 8px 18px; border-radius: 9px; font-weight: 500; color: var(--mut); }
-.abas button[aria-selected="true"] { background: var(--surf); color: var(--txt); box-shadow: var(--sombra); font-weight: 700; }
-
-.resumo { margin: 26px 0 8px; display: flex; flex-wrap: wrap; gap: 10px 32px; align-items: baseline; }
-.resumo p { margin: 0; max-width: 62ch; color: var(--mut); }
-.nums { display: flex; gap: 28px; margin-left: auto; font-variant-numeric: tabular-nums; }
-.nums b { font-size: 26px; font-weight: 700; display: block; line-height: 1.1; }
-.nums span { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--mut); }
-
-.filtros { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 8px; align-items: center; }
-.chip { border: 1px solid var(--linha); background: var(--surf); border-radius: 999px; padding: 6px 14px; font-size: 14px; display: inline-flex; gap: 8px; align-items: center; }
-.chip small { color: var(--mut); font-variant-numeric: tabular-nums; }
-.chip[aria-pressed="true"] { background: var(--acento); border-color: var(--acento); color: var(--acento-txt); }
-.chip[aria-pressed="true"] small { color: inherit; opacity: .85; }
-.campo { border: 1px solid var(--linha); background: var(--surf); color: var(--txt); border-radius: 10px; padding: 8px 12px; font: inherit; min-width: 0; }
-.busca { flex: 1 1 200px; max-width: 320px; margin-left: auto; }
-
-.grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; margin-top: 18px; }
-.card { background: var(--surf); border: 1px solid var(--linha); border-radius: 14px; overflow: hidden; box-shadow: var(--sombra); padding: 0; text-align: left; display: flex; flex-direction: column; }
-.card img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; background: var(--surf2); }
-.card .leg { padding: 10px 12px 12px; display: grid; gap: 2px; }
-.card .leg b { font-size: 12px; letter-spacing: .08em; color: var(--acento); font-weight: 700; }
-.card .leg span { font-size: 14px; font-weight: 500; line-height: 1.3; }
-.card:hover { border-color: var(--acento); }
-.vazio { padding: 48px 0; color: var(--mut); text-align: center; }
-
-/* feed simulado */
-.perfil { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; margin: 28px auto 0; max-width: 620px; }
-.perfil .av { width: 76px; height: 76px; border-radius: 50%; background: var(--azul); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 38px; border: 3px solid var(--surf); box-shadow: 0 0 0 2px var(--verm); }
-.perfil h2 { margin: 0; font-size: 18px; }
-.perfil p { margin: 2px 0 0; color: var(--mut); font-size: 13px; }
-.perfil .n { display: flex; gap: 22px; margin-top: 8px; font-size: 13px; color: var(--mut); }
-.perfil .n b { color: var(--txt); font-size: 15px; }
-.feed { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; max-width: 620px; margin: 22px auto 0; }
-.feed button { border: 0; padding: 0; background: var(--surf2); position: relative; aspect-ratio: 3 / 4; overflow: hidden; }
-.feed img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.feed .ord { position: absolute; left: 6px; top: 6px; background: rgba(7,24,39,.78); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 99px; font-variant-numeric: tabular-nums; }
-.nota-feed { max-width: 620px; margin: 16px auto 0; color: var(--mut); font-size: 13px; text-align: center; }
-
-/* marca */
-.marca-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 24px; }
-.bloco { background: var(--surf); border: 1px solid var(--linha); border-radius: 14px; padding: 20px; box-shadow: var(--sombra); }
-.bloco h3 { margin: 0 0 12px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--mut); font-weight: 500; }
-.cores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.cor { border-radius: 10px; height: 78px; padding: 8px 10px; display: flex; align-items: flex-end; font-size: 12px; font-weight: 700; }
-.bloco p { margin: 8px 0 0; }
-.amostra { font-size: 40px; line-height: 1.1; font-weight: 700; margin: 4px 0 6px; }
-.regras { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
-
-/* detalhe */
-#det { position: fixed; inset: 0; z-index: 20; background: rgba(4,14,25,.72); display: grid; place-items: center;
-  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
-#det[hidden] { display: none; }
-.janela { background: var(--surf); color: var(--txt); border-radius: 18px; max-width: 920px; width: 100%; max-height: 100%; overflow: auto; display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 24px; padding: 20px; position: relative; }
-.janela img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 12px; display: block; background: var(--surf2); }
-.janela .tag { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--acento); }
-.janela h2 { margin: 4px 0 6px; font-size: 24px; line-height: 1.2; text-wrap: balance; }
-.janela .prod { font-weight: 500; margin: 0 0 4px; }
-.janela .obj { color: var(--mut); margin: 0 0 14px; }
-.janela h3 { margin: 0; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--mut); font-weight: 500; }
-.legenda { white-space: pre-wrap; background: var(--surf2); border-radius: 10px; padding: 12px 14px; font-size: 14px; max-height: 230px; overflow: auto; margin: 8px 0 0; }
-.linha-leg { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.bt { border: 1px solid var(--linha); background: var(--surf); border-radius: 10px; padding: 7px 14px; }
-.bt:hover { border-color: var(--acento); }
-.nav { display: flex; gap: 8px; margin-top: 16px; }
-.acoes { margin-top: 18px; display: grid; gap: 8px; }
-.bt.prim { background: var(--acento); border-color: var(--acento); color: var(--acento-txt); font-weight: 700; padding: 13px 16px; font-size: 16px; }
-.bt.peq { font-size: 13px; color: var(--mut); }
-.bt:disabled { opacity: .6; cursor: progress; }
-.dica { margin: 0; font-size: 13px; color: var(--mut); }
-.fmts { display: flex; flex-wrap: wrap; gap: 8px; }
-.aviso { margin: 0; min-height: 1.3em; font-size: 13px; color: var(--acento); font-weight: 500; }
-.fechar { position: absolute; right: 12px; top: 12px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--surf2); font-size: 20px; line-height: 1; }
-@media (max-width: 720px) {
-  .janela { grid-template-columns: 1fr; padding: 14px; }
-  .janela img { max-width: 300px; margin: 0 auto; }
-  .nums { margin-left: 0; }
-  .grade { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-}
-@media (prefers-reduced-motion: no-preference) { .card { transition: border-color .15s; } }
-</style>
-
-<div class="wrap">
-  <header class="topo">
-    <div class="marca">
-      <div class="c" aria-hidden="true">C</div>
-      <div><h1>Repositório Castro</h1><small>Castro Construções · Trindade-PE · Instagram</small></div>
-    </div>
-    <div class="abas" role="tablist" id="abas">
-      <button role="tab" data-aba="modelos" aria-selected="true">Modelos</button>
-      <button role="tab" data-aba="feed" aria-selected="false">Feed</button>
-      <button role="tab" data-aba="marca" aria-selected="false">Marca</button>
-    </div>
+<div class="canvas"><div class="frame"><div class="main">
+  <header class="top">
+    <div class="logo-m"><img src="marca/logos/avatar.png" alt=""></div>
+    <div class="titulo-app">Repositório Castro<small>Banco de artes prontas</small></div>
+    <div class="temas" id="temas"></div>
+    <label class="busca">
+      <svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="busca" type="search" placeholder="Buscar modelo, produto, marca ou código (PIS-01)…" autocomplete="off">
+    </label>
   </header>
+  <main class="view" id="view"></main>
+</div></div></div>
+<nav id="tabbar" aria-label="Seções"></nav>
 
-  <section class="resumo">
-    <p>As artes prontas do Instagram da loja: fotos oficiais dos fabricantes, preço por m² e legenda de cada post. Toque numa arte para abrir no Canva (app ou navegador) e editar, ou para exportar.</p>
-    <div class="nums">
-      <div><b>90</b><span>artes</span></div>
-      <div><b>9</b><span>grupos</span></div>
-      <div><b>1080×1440</b><span>px (3:4)</span></div>
-    </div>
-  </section>
-
-  <main id="vista"></main>
-</div>
-
-<div id="det" hidden role="dialog" aria-modal="true" aria-label="Detalhe da arte">
-  <div class="janela">
-    <button class="fechar" id="fechar" aria-label="Fechar">×</button>
-    <img id="dImg" alt="">
-    <div>
-      <div class="tag" id="dTag"></div>
-      <h2 id="dNome"></h2>
-      <p class="prod" id="dProd"></p>
-      <p class="obj" id="dObj"></p>
-      <div class="linha-leg"><h3>Legenda para postar</h3><button class="bt" id="dCopiar">Copiar</button></div>
-      <div class="legenda" id="dLeg" tabindex="0"></div>
+<div class="modal" id="detalhe" hidden role="dialog" aria-modal="true">
+  <div class="caixa">
+    <button class="fechar" id="btFechar" aria-label="Fechar">✕</button>
+    <div class="previa"><img id="dImg" alt=""></div>
+    <div class="info">
+      <div class="cod" id="infoCod"></div>
+      <h2 id="infoNome"></h2>
+      <p class="obj" id="infoObj"></p>
+      <p class="prod" id="infoProd"></p>
       <div class="acoes">
-        <button class="bt prim" id="dCanva">Abrir no Canva para editar</button>
-        <p class="dica" id="dDica">No menu que abrir, escolha <b>Canva</b>. O arquivo vai junto, com textos editáveis.</p>
-        <button class="bt peq" id="dCanva2">Não apareceu o Canva? Baixar e abrir o Canva</button>
-        <h3>Exportar</h3>
+        <button id="btCanva" class="bt canva">Abrir no Canva</button>
+        <p class="dica">Abre o menu do Android: escolha <b>Canva</b>. A arte chega com os textos editáveis.</p>
+        <button id="btCanva2" class="bt peq">Não apareceu o Canva? Baixar e abrir o app</button>
+        <div class="rot2">Exportar</div>
         <div class="fmts">
-          <button class="bt" data-fmt="jpg">JPG</button><button class="bt" data-fmt="png">PNG</button>
-          <button class="bt" data-fmt="pptx">PPTX</button><button class="bt" data-fmt="pdf">PDF</button>
-          <button class="bt" data-fmt="compartilhar">Compartilhar imagem</button>
+          <button class="bt" data-fmt="jpg">JPG<small>1080×1440, para postar</small></button>
+          <button class="bt" data-fmt="png">PNG<small>1080×1440, sem perda</small></button>
+          <button class="bt" data-fmt="pptx">PPTX<small>PowerPoint e Canva</small></button>
+          <button class="bt" data-fmt="pdf">PDF<small>1 página, imagem</small></button>
+          <button class="bt larg" data-fmt="compartilhar">Compartilhar imagem (WhatsApp, Instagram…)</button>
         </div>
-        <p class="aviso" id="dAviso" role="status" aria-live="polite"></p>
+        <p class="msg" id="dMsg" role="status" aria-live="polite"></p>
       </div>
-      <div class="nav"><button class="bt" id="dAnt">← Anterior</button><button class="bt" id="dProx">Próximo →</button></div>
+      <label class="rot-leg">Legenda <button id="btLegenda" class="mini-bt">Copiar</button></label>
+      <textarea id="infoLegenda" readonly></textarea>
+      <div class="navdet"><button id="btAnt" class="bt">← Anterior</button><button id="btProx" class="bt">Próximo →</button></div>
     </div>
   </div>
 </div>
+<div id="aviso" hidden></div>
 
 <script>
 const D = {"grupos":[["pisos","Pisos e Revestimentos"],["banheiro","Banheiro"],["ferramentas","Ferramentas"],["tintas","Tintas e Pintura"],["tubos","Tubos e Conexões"],["argamassas","Argamassas e Impermeabilização"],["eletrica","Elétrica e Iluminação"],["cozinha","Cozinha"],["institucional","Institucional"]],"posts":[{"id":"PIS-01","nome":"Cement Grigio 88×88 (meio a meio)","grupo":"pisos","pilar":"vitrine","tema":"C","obj":"Apresentar o porcelanato cinza Formigres de 88×88 (peça quadrada) com preço por m²","prod":"Formigres · Cement Grigio Granilha RT 88×88","leg":"O cinza cimento que combina com tudo, agora em peça grande. 🩶\n\nCement Grigio 88×88 · Formigres Premium\n✔ Superfície granilhada, mais segura em áreas externas cobertas\n✔ Borda retificada: junta fina e acabamento contínuo\n✔ Peça grande 88×88: menos rejunte, visual limpo\n\nA partir de R$ 89,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#porcelanato #formigres #pisocinza #trindadepe #sertaodoararipe"},{"id":"PIS-02","nome":"Oro Bianco em estúdio","grupo":"pisos","pilar":"vitrine","tema":"C","obj":"Valorizar a peça Portobello como objeto de desejo (premium)","prod":"Portobello · Oro Bianco 60×120 Polido (28635E)","leg":"Branco, polido e com veios dourados: o Oro Bianco da Portobello transforma qualquer ambiente. ✨\n\n✔ Porcelanato 60×120 polido retificado\n✔ Inspirado em mármores italianos\n✔ Para pisos e paredes internos\n\nA partir de R$ 189,90/m².\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#portobello #porcelanato #marmorizado #trindadepe"},{"id":"PIS-03","nome":"Nero Venato aplicado","grupo":"pisos","pilar":"vitrine","tema":"F","obj":"Mostrar o porcelanato escuro aplicado (desejo + especificação)","prod":"Portobello · Nero Venato 60×120 Polido (27103E)","leg":"Preto, polido e com veios brancos marcantes. 🖤\n\n✔ 60×120 polido retificado\n✔ Pisos e paredes internos\n✔ Pronta entrega na Castro\n\nA partir de R$ 219,90/m².\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#portobello #neroventato #porcelanatopreto #trindadepe"},{"id":"PIS-04","nome":"Coleção mármores Formigres","grupo":"pisos","pilar":"vitrine","tema":"C","obj":"Mostrar variedade de uma linha (catálogo) e gerar conversa","prod":"","leg":"Qual é a sua favorita: 1, 2 ou 3? Conta pra gente nos comentários! 👇\n\n1️⃣ Gran Colorado 60×120 polido\n2️⃣ Gran Machia Oro 60×120 polido\n3️⃣ Marmi Rose 88×88 polido\n\nTodos Formigres Premium, retificados, para pisos e paredes internos.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#formigres #porcelanato #marmore #trindadepe"},{"id":"PIS-05","nome":"Banheiro com cara de revista","grupo":"pisos","pilar":"inspiracao","tema":"C","obj":"Despertar desejo com ambiente e levar para o WhatsApp","prod":"Formigres · Marmi Rose RT Polido 88×88","leg":"Banheiros claros parecem maiores, mais frescos e mais elegantes. ☀️\n\nO Marmi Rose 88×88 da Formigres tem fundo claro com veios suaves e acabamento polido.\n\nA partir de R$ 169,90/m². Quer ver a peça de pertinho? Passa aqui na loja ou chama no WhatsApp.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#formigres #salaclara #porcelanato #trindadepe"},{"id":"PIS-06","nome":"Inspiração área externa amadeirada","grupo":"pisos","pilar":"inspiracao","tema":"F","obj":"Inspirar uso do porcelanato amadeirado na área externa","prod":"Formigres · Garapeira 20×120","leg":"A beleza da madeira na varanda, sem cupim, sem verniz e sem manutenção. 🌿\n\nGarapeira 20×120 da Formigres: granilhado, retificado e com impressão HD.\n\nA partir de R$ 79,90/m².\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#varanda #pisoamadeirado #formigres #trindadepe"},{"id":"PIS-07","nome":"Gran Colorado em estúdio","grupo":"pisos","pilar":"vitrine","tema":"C","obj":"Apresentar o porcelanato marmorizado como peça de desejo, com preço","prod":"Formigres · Gran Colorado 60×120 polido retificado","leg":"Um mármore que vira obra de arte no piso. ✨\n\nGran Colorado 60×120 · Formigres Premium\n✔ Polido retificado\n✔ Veios dourados sobre fundo cinza\n✔ Para pisos e paredes internos\n\nA partir de R$ 149,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#formigres #porcelanato #marmore #trindadepe #sertaodoararipe"},{"id":"PIS-08","nome":"Verde Alpi 120×278","grupo":"pisos","pilar":"vitrine","tema":"F","obj":"Mostrar o porcelanato verde de grande formato em ambiente","prod":"Portobello · Verde Alpi 120×278","leg":"Quando o mármore verde chega, o ambiente muda de nível. 🌿\n\nVerde Alpi 120×278 · Portobello\n✔ Formato gigante 120×278 cm\n✔ Efeito mármore verde profundo\n✔ Para paredes e pisos internos\n\nA partir de R$ 349,90/m² em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#portobello #verdealpi #porcelanato #trindadepe"},{"id":"PIS-09","nome":"Hit Off White 90×90","grupo":"pisos","pilar":"vitrine","tema":"C","obj":"Mostrar o porcelanato claro 90×90 em ambiente, com a peça quadrada e o preço","prod":"Portobello · Hit Off White 90×90","leg":"Tom claro, visual limpo e um ambiente que parece maior. 🛏️\n\nHit Off White 90×90 · Portobello\n✔ Acabamento natural e retificado\n✔ Peça grande 90×90: menos rejunte\n✔ Para pisos e paredes internos\n\nA partir de R$ 129,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#portobello #hitoffwhite #porcelanato #trindadepe"},{"id":"PIS-10","nome":"Por que só áreas internas?","grupo":"pisos","pilar":"educativo","tema":"F","obj":"Educar sobre indicação interna e externa do porcelanato","prod":"Portobello · Hit Off White 90×90","leg":"Nem todo piso serve para todo lugar. 🤔\n\nHit Off White 90×90 · Portobello\n✔ Indicação para áreas internas\n✔ Superfície lisa e elegante\n✔ Peça grande 90×90\n\nA partir de R$ 129,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#portobello #pisointerno #porcelanato #trindadepe"},{"id":"PIS-11","nome":"Casa de praia","grupo":"pisos","pilar":"vitrine","tema":"F","obj":"Inspirar piso para área externa com preço","prod":"Formigres · Formigres Premium 1535","leg":"Beira de piscina, praia ou varanda: piso bonito e seguro. 🏖️\n\nFormigres Premium · cinza claro\n✔ Para áreas externas cobertas\n✔ Cor neutra e moderna\n✔ Fácil de limpar\n\nA partir de R$ 74,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#formigres #areaexterna #pisoexterno #trindadepe"},{"id":"PIS-12","nome":"Banheiro com classe","grupo":"pisos","pilar":"inspiracao","tema":"F","obj":"Inspirar com ambiente de banheiro e amostra do porcelanato","prod":"Portobello · Hit Off White 90×90","leg":"E é essa sofisticação que você encontra no Hit Off White. 🛁\n\nHit Off White 90×90 · Portobello\n✔ Tom claro que amplia o ambiente\n✔ Acabamento elegante\n✔ Para pisos e paredes internos\n\nA partir de R$ 129,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#portobello #banheiro #porcelanato #trindadepe"},{"id":"PIS-13","nome":"#DESTAQUE mármores Formigres","grupo":"pisos","pilar":"vitrine","tema":"A","obj":"Mostrar três mármores da linha Premium","prod":"Formigres · Linha Premium polidos","leg":"#DestaqueCastro: três mármores para escolher. 🤍\n\nGran Colorado, Gran Machia Oro e Marmi Rose · Formigres Premium\n✔ Todos polidos e retificados\n✔ Para pisos e paredes internos\n\nA partir de R$ 99,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#formigres #marmore #destaquecastro #trindadepe"},{"id":"PIS-14","nome":"Linha Incenor em lista","grupo":"pisos","pilar":"vitrine","tema":"C","obj":"Apresentar a variedade da linha Incenor com formatos","prod":"Incenor · Linha PSI","leg":"Quatro acabamentos, um só lugar. 🧱\n\nIncenor · PSI 67180, 67200, 67170 e 67210\n✔ Do mármore ao cimento queimado\n✔ Para pisos e paredes internos\n\nA partir de R$ 69,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#incenor #porcelanato #revestimento #trindadepe"},{"id":"PIS-15","nome":"Matéria-Prima em quatro cores","grupo":"pisos","pilar":"vitrine","tema":"C","obj":"Mostrar a variedade de cores da linha Matéria-Prima","prod":"Portobello · Matéria-Prima 30×120","leg":"Cor e textura para a parede que você sempre quis. 🎨\n\nMatéria-Prima · Portobello\n✔ Efeito tijolinho em várias cores\n✔ Para paredes internas e fachadas cobertas\n\nA partir de R$ 129,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#portobello #tijolinho #revestimento #trindadepe"},{"id":"PIS-16","nome":"#DESTAQUE Oro Bianco","grupo":"pisos","pilar":"oferta","tema":"C","obj":"Destacar o Oro Bianco com preço","prod":"Portobello · Oro Bianco 60×120 polido","leg":"Branco, polido e com veios dourados. ✨\n\nOro Bianco 60×120 · Portobello\n✔ Polido retificado\n✔ Inspirado em mármores italianos\n✔ Para pisos e paredes internos\n\nA partir de R$ 189,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#portobello #orobianco #porcelanato #trindadepe"},{"id":"PIS-17","nome":"Qual você prefere? Calacatta","grupo":"pisos","pilar":"educativo","tema":"A","obj":"Gerar conversa e ajudar a escolher entre dois acabamentos","prod":"Incenor · PSI 67180 × 67200","leg":"Branco com veios cinza ou creme com veios dourados? 🤔\n\n1️⃣ PSI 67180\n2️⃣ PSI 67200\n\nOs dois Incenor, para pisos e paredes internos.\n\nConta pra gente qual você escolheria! 👇\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#incenor #calacatta #porcelanato #trindadepe"},{"id":"PIS-18","nome":"Marrom Caramelo","grupo":"pisos","pilar":"vitrine","tema":"F","obj":"Inspirar com piso amadeirado em quarto, com preço","prod":"Incenor · Marrom Caramelo PSI 65620","leg":"A madeira que aquece o quarto, com a resistência do porcelanato. 🪵\n\nMarrom Caramelo PSI 65620 · Incenor\n✔ Visual amadeirado quente\n✔ Resistente e fácil de limpar\n\nA partir de R$ 89,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#incenor #pisoamadeirado #quarto #trindadepe"},{"id":"PIS-19","nome":"Detalhes naturais","grupo":"pisos","pilar":"inspiracao","tema":"F","obj":"Mostrar o amadeirado e o ambiente externo, com preço","prod":"Formigres · Garapeira 20×120","leg":"Cada veio, cada nó: o amadeirado em alta definição. 🌿\n\nGarapeira 20×120 · Formigres Premium\n✔ Impressão HD\n✔ Superfície granilhada\n✔ Para áreas externas\n\nA partir de R$ 79,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#formigres #garapeira #pisoamadeirado #trindadepe"},{"id":"PIS-20","nome":"Dicas de revestimento para o banheiro","grupo":"pisos","pilar":"educativo","tema":"C","obj":"Dar dicas de escolha de revestimento de banheiro","prod":"Formigres · Linha Premium polidos","leg":"Banheiro claro e polido parece maior e mais elegante. 🛁\n\nGran Colorado, Gran Machia Oro e Marmi Rose · Formigres\n✔ Polidos e retificados\n✔ Paredes e pisos internos\n\nA partir de R$ 99,90/m² no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#formigres #banheiro #revestimento #trindadepe"},{"id":"BAN-01","nome":"Kit completo Nova Level","grupo":"banheiro","pilar":"inspiracao","tema":"F","obj":"Despertar desejo pelo banheiro completo e levar ao WhatsApp","prod":"Deca · Kit completo bacia com caixa acoplada Nova Level branco","leg":"Bacia, caixa acoplada e acabamento limpo em um só kit. 🚽\n\nKit completo Nova Level · Deca\n✔ Bacia com caixa acoplada\n✔ Linhas modernas, fácil de limpar\n✔ Cor branca\n\nPor R$ 649,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#deca #banheiro #bacia #trindadepe #sertaodoararipe"},{"id":"BAN-02","nome":"Chuveiro black matte","grupo":"banheiro","pilar":"vitrine","tema":"F","obj":"Mostrar o chuveiro de parede preto instalado, com preço","prod":"Deca · Chuveiro de parede com tubo quadrado Black Matte","leg":"O preto fosco que combina com tudo. 🖤\n\nChuveiro de parede Black Matte · Deca\n✔ Tubo quadrado\n✔ Acabamento black matte\n✔ Visual moderno\n\nPor R$ 389,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#deca #chuveiro #blackmatte #trindadepe"},{"id":"BAN-03","nome":"Acqua Duo Ultra","grupo":"banheiro","pilar":"oferta","tema":"A","obj":"Vender o chuveiro eletrônico Lorenzetti","prod":"Lorenzetti · Acqua Duo Ultra","leg":"Banho gostoso com a tecnologia Lorenzetti. 🚿\n\nChuveiro Acqua Duo Ultra · Lorenzetti\n✔ Ducha eletrônica\n✔ Jato amplo\n✔ Design moderno\n\nPor R$ 329,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#lorenzetti #chuveiro #acquaduo #trindadepe"},{"id":"BAN-04","nome":"Ducali Black Zagonel","grupo":"banheiro","pilar":"oferta","tema":"A","obj":"Vender o chuveiro Ducali Black em cartaz de parede","prod":"Zagonel · Ducali Black","leg":"Visual black e muito desempenho no banho. 🖤\n\nChuveiro Ducali Black · Zagonel\n✔ Design preto elegante\n✔ Ducha ampla\n✔ Para a sua instalação elétrica\n\nPor R$ 289,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#zagonel #chuveiro #ducali #trindadepe"},{"id":"BAN-05","nome":"Misturador Arthur Casas","grupo":"banheiro","pilar":"vitrine","tema":"C","obj":"Apresentar o misturador black matte como peça de design","prod":"Deca · Misturador de mesa bica alta Arthur Casas Black Matte","leg":"Design de autor para o seu lavatório. ✨\n\nMisturador Arthur Casas Black Matte · Deca\n✔ Bica alta\n✔ Acabamento black matte\n✔ Para lavatórios e cubas\n\nPor R$ 749,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#deca #arthurcasas #misturador #trindadepe"},{"id":"BAN-06","nome":"#DESTAQUE Unic Red Gold","grupo":"banheiro","pilar":"oferta","tema":"C","obj":"Destacar o misturador dourado com preço","prod":"Deca · Misturador monocomando Unic Red Gold","leg":"Um toque dourado transforma o banheiro. 🥇\n\nMisturador monocomando Unic Red Gold · Deca\n✔ Monocomando de bica baixa\n✔ Acabamento Red Gold\n\nPor R$ 519,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#deca #redgold #misturador #trindadepe"},{"id":"BAN-07","nome":"Cubas Luzarte","grupo":"banheiro","pilar":"vitrine","tema":"C","obj":"Mostrar quatro modelos de cuba em lista","prod":"Luzarte · Cubas Açores, Alentejo, Barcelos e Douro","leg":"A cuba certa define o estilo do lavatório. 🚰\n\nCubas Açores, Alentejo, Barcelos e Douro · Luzarte\n✔ Cubas de apoio em louça branca\n✔ Quatro formatos diferentes\n\nConsulte valores na loja ou no WhatsApp.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#luzarte #cuba #lavatorio #trindadepe"},{"id":"BAN-08","nome":"Chuveiros Lorenzetti","grupo":"banheiro","pilar":"vitrine","tema":"C","obj":"Mostrar quatro chuveiros Lorenzetti","prod":"Lorenzetti · Chuveiros Acqua e Duo Shower","leg":"Qual combina com o seu banho? 🚿\n\nAcqua Duo Flex, Acqua Duo Ultra, Acqua Storm Ultra e Duo Shower Quadra · Lorenzetti\n✔ Versões eletrônicas e de ducha larga\n✔ Design moderno\n\nConsulte valores na loja ou no WhatsApp.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#lorenzetti #chuveiro #banho #trindadepe"},{"id":"BAN-09","nome":"Cuba oval × quadrada","grupo":"banheiro","pilar":"educativo","tema":"A","obj":"Ajudar a escolher entre a cuba oval e a quadrada","prod":"Deca · Cuba oval × quadrada","leg":"Oval ou quadrada? 🤔\n\n1️⃣ Cuba de embutir oval Deca 30×40 cm\n2️⃣ Cuba de embutir quadrada Deca 35×35 cm\n\nAs duas em louça branca, Linha L.\n\nQual combina com o seu banheiro? 👇\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#deca #cuba #lavatorio #trindadepe"},{"id":"BAN-10","nome":"Bacia LK Barbante","grupo":"banheiro","pilar":"inspiracao","tema":"F","obj":"Inspirar com a bacia em ambiente, com amostra do produto","prod":"Deca · Bacia para caixa acoplada LK Barbante","leg":"Cor suave e linhas limpas para o banheiro. 🤍\n\nBacia para caixa acoplada LK Barbante · Deca\n✔ Cor barbante, em tom neutro\n✔ Combina com revestimentos claros\n\nPor R$ 429,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#deca #bacia #banheiro #trindadepe"},{"id":"BAN-11","nome":"Torneira Touchless Orbe","grupo":"banheiro","pilar":"inspiracao","tema":"F","obj":"Mostrar a torneira touchless sobre ambiente de lavatório","prod":"Deca · Torneira de mesa bica alta touchless Orbe Corten","leg":"Higiene e design: a torneira que abre sem tocar. ✨\n\nTorneira touchless Orbe Corten · Deca\n✔ Acionamento sem toque\n✔ Bica alta para lavatório\n✔ Acabamento Corten\n\nPor R$ 1.290,00 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#deca #touchless #torneira #trindadepe"},{"id":"BAN-12","nome":"Chuveiros Deca","grupo":"banheiro","pilar":"vitrine","tema":"C","obj":"Mostrar dois chuveiros de parede Deca","prod":"Deca · Chuveiros de parede Flex Plus e Black Matte","leg":"Três modelos de parede para escolher. 🚿\n\nFlex Plus redondo, Flex Plus retangular e Black Matte · Deca\n✔ Com desviador e ducha manual\n✔ Acabamento cromado ou preto\n\nConsulte valores na loja ou no WhatsApp.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#deca #chuveiro #banheiro #trindadepe"},{"id":"FER-01","nome":"Furadeira de impacto 500 W","grupo":"ferramentas","pilar":"oferta","tema":"A","obj":"Vender a furadeira de impacto, carro-chefe das ferramentas elétricas","prod":"Tramontina · Furadeira de impacto 500 W","leg":"Potência para furar concreto, tijolo e madeira sem sofrer. 🔧\n\nFuradeira de impacto 500 W · Tramontina\n✔ Função impacto para alvenaria\n✔ Empunhadura lateral para mais controle\n✔ 127 V\n\nPor R$ 249,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#furadeira #tramontina #ferramentas #trindadepe #sertaodoararipe"},{"id":"FER-02","nome":"Trena 5 m","grupo":"ferramentas","pilar":"oferta","tema":"A","obj":"Venda de impulso de um item do dia a dia da obra","prod":"Tramontina · Trena 5 m","leg":"Medir certo é o primeiro passo de uma obra sem retrabalho. 📏\n\nTrena 5 m · Tramontina\n✔ Fita de aço resistente\n✔ Trava para fixar a medida\n✔ Corpo robusto\n\nPor R$ 29,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#trena #tramontina #ferramentas #trindadepe"},{"id":"FER-03","nome":"Carrinho de mão extraforte","grupo":"ferramentas","pilar":"vitrine","tema":"F","obj":"Mostrar o carrinho em uso na obra, com preço","prod":"Tramontina · Carrinho de mão extraforte 65 L","leg":"Feito para a rotina pesada da obra: caçamba metálica reforçada, braço metálico e pneu. 💪\n\nCarrinho de mão extraforte 65 L · Tramontina\n✔ Caçamba metálica de 65 litros\n✔ Braço metálico\n✔ Pneu resistente\n\nA partir de R$ 289,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#carrinhodemao #tramontina #obra #trindadepe"},{"id":"FER-04","nome":"Maleta organizadora 17\"","grupo":"ferramentas","pilar":"vitrine","tema":"A","obj":"Vender a maleta de organização (ticket médio, compra por impulso)","prod":"Tramontina · Maleta plástica organizadora 17\" Master","leg":"Parafusos, buchas e pequenas peças, cada um no seu lugar. 🧰\n\nMaleta organizadora 17\" · Tramontina Master\n✔ Divisórias móveis\n✔ Tampa transparente\n✔ Alça para transporte\n\nPor R$ 79,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#organizador #tramontina #ferramentas #trindadepe"},{"id":"FER-05","nome":"Kit do pedreiro","grupo":"ferramentas","pilar":"vitrine","tema":"C","obj":"Mostrar a variedade de ferramentas de mão da mesma marca","prod":"","leg":"Ferramenta boa dura anos e faz o serviço render. 🔨\n\n1️⃣ Martelo de unha polido 27 mm\n2️⃣ Trena 5 m\n3️⃣ Chave para tubos 14\"\n4️⃣ Espátula rígida 4 cm\n\nTudo Tramontina, com pronta entrega na Castro.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#ferramentas #tramontina #pedreiro #trindadepe"},{"id":"FER-06","nome":"Serra copo 92 mm","grupo":"ferramentas","pilar":"oferta","tema":"C","obj":"Vender o acessório de corte para quem instala fechaduras e pontos","prod":"Tramontina · Serra copo 92 mm com dente de metal duro","leg":"Furo limpo em madeira, gesso e PVC, no diâmetro certo. 🪚\n\nSerra copo 92 mm · Tramontina Master\n✔ Dente de metal duro\n✔ Aço especial\n✔ Para furadeira comum\n\nPor R$ 54,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#serracopo #tramontina #ferramentas #trindadepe"},{"id":"FER-07","nome":"Maleta 17\" × caixa 16\"","grupo":"ferramentas","pilar":"educativo","tema":"A","obj":"Ajudar a escolher entre dois organizadores","prod":"","leg":"Peça pequena ou ferramenta grande? Cada serviço pede um organizador. 🧰\n\n🔹 Maleta 17\": muitas divisórias para parafusos e buchas\n🔹 Caixa 16\": mais espaço para ferramentas de mão\n\nOs dois são Tramontina Master.\n\nQual é o seu? Conta pra gente! 👇\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#organizador #tramontina #ferramentas #trindadepe"},{"id":"FER-08","nome":"Caixa de ferramentas 16\"","grupo":"ferramentas","pilar":"vitrine","tema":"A","obj":"Vender a caixa de ferramentas","prod":"Tramontina · Organizador plástico 16\" Master","leg":"Ferramenta guardada é ferramenta que dura. 🧰\n\nCaixa de ferramentas 16\" · Tramontina Master\n✔ Bandeja removível\n✔ Alça reforçada\n✔ Fechos de segurança\n\nPor R$ 69,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#caixadeferramentas #tramontina #ferramentas #trindadepe"},{"id":"FER-09","nome":"Chave para tubos 14\" aplicada","grupo":"ferramentas","pilar":"vitrine","tema":"F","obj":"Mostrar a chave de grifo em uso por profissional","prod":"Tramontina · Chave para tubos 14\" Master","leg":"Para o encanador que não pode errar. 🔧\n\nChave para tubos 14\" · Tramontina Master\n✔ Corpo em ferro fundido\n✔ Mandíbulas em aço alto carbono\n✔ Aperto firme em tubos metálicos\n\nPor R$ 129,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#chavedetubos #encanador #tramontina #trindadepe"},{"id":"FER-10","nome":"Martelo de unha 27 mm","grupo":"ferramentas","pilar":"oferta","tema":"C","obj":"Venda de impulso de uma ferramenta básica","prod":"Tramontina · Martelo de unha polido 27 mm Master","leg":"O básico que nunca sai da caixa. 🔨\n\nMartelo de unha polido 27 mm · Tramontina Master\n✔ Cabo em madeira envernizada\n✔ Cabeça polida\n✔ Para pregar e arrancar\n\nPor R$ 39,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#martelo #tramontina #ferramentas #trindadepe"},{"id":"TIN-01","nome":"Acaba com o Mofo 3,6 L","grupo":"tintas","pilar":"vitrine","tema":"C","obj":"Apresentar a tinta anti-mofo para paredes de banheiro e cozinha","prod":"Iquine · Acaba com o Mofo 3,6 L","leg":"Mofo na parede não precisa virar rotina. 🦠\n\nAcaba com o Mofo · Iquine (3,6 L)\n✔ Cobertura que protege contra o mofo\n✔ Sem cheiro forte\n✔ Para áreas internas e externas\n\nPor R$ 169,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tinta #acabacomomofo #iquine #trindadepe #sertaodoararipe"},{"id":"TIN-02","nome":"Diatex Pinta Mais 20 L","grupo":"tintas","pilar":"oferta","tema":"A","obj":"Vender o balde grande de tinta acrílica econômica","prod":"Iquine · Diatex Pinta Mais 20 L","leg":"Para pintar a casa toda com economia. 🎨\n\nDiatex Pinta Mais · Iquine (balde 20 L)\n✔ Ótimo rendimento\n✔ Acabamento uniforme\n✔ Para paredes internas\n\nA partir de R$ 289,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#diatex #iquine #tinta #pintura #trindadepe"},{"id":"TIN-03","nome":"Dialine Topa Tudo 3,6 L","grupo":"tintas","pilar":"vitrine","tema":"C","obj":"Apresentar o esmalte sintético para madeira e metal","prod":"Iquine · Dialine Topa Tudo 3,6 L","leg":"Portão, grade, janela ou porta de madeira: um esmalte para todos. 🚪\n\nDialine Topa Tudo · Iquine (3,6 L)\n✔ Esmalte sintético premium\n✔ Para madeira e metal\n✔ Interiores e exteriores\n\nPor R$ 219,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#esmalte #dialine #iquine #tinta #trindadepe"},{"id":"TIN-04","nome":"Delanil Madeiras e Metais 3 L","grupo":"tintas","pilar":"vitrine","tema":"A","obj":"Vender o esmalte de brilho intenso para madeiras e metais","prod":"Iquine · Delanil Madeiras e Metais 3 L","leg":"Para dar vida nova a portas, janelas e grades. ✨\n\nDelanil Madeiras e Metais · Iquine\n✔ Fácil aplicação\n✔ Brilho intenso\n✔ Secagem rápida\n\nPor R$ 149,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#delanil #iquine #esmalte #tinta #trindadepe"},{"id":"TIN-05","nome":"Decoratto Mármore","grupo":"tintas","pilar":"inspiracao","tema":"A","obj":"Inspirar com o efeito mármore na parede","prod":"Iquine · Decoratto Mármore 4,4 kg","leg":"Sofisticação de mármore sem obra pesada. 🤍\n\nDecoratto Mármore · Iquine\n✔ Efeito decorativo premium\n✔ Para áreas internas\n✔ Fácil aplicação\n\nPor R$ 129,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#decoratto #efeitomarmore #iquine #decoracao #trindadepe"},{"id":"TIN-06","nome":"Diapiso 3,6 L","grupo":"tintas","pilar":"oferta","tema":"C","obj":"Vender a tinta de piso para quadras e garagens","prod":"Iquine · Diapiso 3,6 L","leg":"Garagem, calçada e quadra com visual novo. 🏁\n\nDiapiso Super-Resistente · Iquine (3,6 L)\n✔ Alta resistência ao tráfego\n✔ Para áreas internas e externas\n✔ Acabamento premium\n\nPor R$ 249,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#diapiso #tintaparapiso #iquine #trindadepe"},{"id":"TIN-07","nome":"Dialine Antiferrugem 3,6 L","grupo":"tintas","pilar":"educativo","tema":"A","obj":"Educar: fundo antiferrugem antes do esmalte","prod":"Iquine · Dialine Antiferrugem 3,6 L","leg":"Pintar direto sobre a ferrugem não funciona. A dica é começar pelo fundo. 🔩\n\nDialine Antiferrugem · Iquine (3,6 L)\n✔ Protege o metal\n✔ Base perfeita para o esmalte\n✔ Interiores e exteriores\n\nPor R$ 189,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#antiferrugem #dialine #iquine #pintura #trindadepe"},{"id":"TIN-08","nome":"Linha Iquine para cada superfície","grupo":"tintas","pilar":"vitrine","tema":"C","obj":"Mostrar que a Castro tem tinta para cada superfície da casa","prod":"","leg":"Cada superfície pede a tinta certa. 🎨\n\n1️⃣ Diatex Pinta Mais: paredes internas\n2️⃣ Delanil: madeiras e metais\n3️⃣ Dialine Topa Tudo: esmalte premium\n4️⃣ Diapiso: pisos e quadras\n\nTudo Iquine, com pronta entrega na Castro.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#iquine #tinta #pintura #trindadepe"},{"id":"TIN-09","nome":"Cimento queimado × Mármore","grupo":"tintas","pilar":"educativo","tema":"A","obj":"Ajudar a escolher o efeito decorativo da parede","prod":"","leg":"Dois efeitos, dois estilos. Qual combina com a sua casa? 🏠\n\n🔹 Cimento queimado: visual industrial e moderno\n🔹 Mármore: sofisticação e veios suaves\n\nAmbos Decoratto · Iquine.\n\nConta pra gente nos comentários! 👇\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#decoratto #cimentoqueimado #efeitomarmore #iquine #trindadepe"},{"id":"TIN-10","nome":"Diepóxi multissuperfícies 3,6 L","grupo":"tintas","pilar":"vitrine","tema":"C","obj":"Vender o esmalte à base de água multissuperfícies","prod":"Iquine · Diepóxi Multissuperfícies 3,6 L","leg":"Alta resistência e pouco cheiro para pintar com conforto. 🌿\n\nDiepóxi Multissuperfícies · Iquine (3,6 L)\n✔ Para várias superfícies\n✔ Sem cheiro forte\n✔ Alta resistência\n\nPor R$ 279,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#diepoxi #iquine #tinta #pintura #trindadepe"},{"id":"TUB-01","nome":"Caixa d’água Fortlev 1000 L","grupo":"tubos","pilar":"vitrine","tema":"C","obj":"Mostrar a caixa d’água grande, com preço","prod":"Fortlev · Caixa d’água 1.000 L","leg":"Casa abastecida não fica sem água. 💧\n\nCaixa d'água 1.000 L · Fortlev\n✔ Reservatório de 1.000 litros\n✔ Resistente ao sol e ao tempo\n✔ Fácil de limpar\n\nPor R$ 589,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#fortlev #caixadagua #hidraulica #trindadepe #sertaodoararipe"},{"id":"TUB-02","nome":"Adaptador roscável com anel","grupo":"tubos","pilar":"vitrine","tema":"A","obj":"Apresentar o adaptador da caixa d’água","prod":"Tigre · Adaptador roscável com anel para caixa d’água","leg":"Vedação segura na saída da caixa d'água. 💧\n\nAdaptador roscável com anel · Tigre\n✔ Rosca e anel de vedação\n✔ Para caixa d'água\n✔ Instalação simples\n\nPor R$ 24,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tigre #hidraulica #caixadagua #trindadepe"},{"id":"TUB-03","nome":"Instalação com tubo e conexão Tigre","grupo":"tubos","pilar":"vitrine","tema":"F","obj":"Mostrar a instalação real da conexão no tubo, com preço","prod":"Tigre · Tubo e conexão Série R","leg":"Instalação bem feita começa pelo encaixe certo. 🔧\n\nTubo e conexão para esgoto · Tigre\n✔ Encaixe firme\n✔ Vedação segura\n✔ Linha Série R\n\nPor R$ 39,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tigre #esgoto #hidraulica #trindadepe"},{"id":"TUB-04","nome":"Junção dupla Série R","grupo":"tubos","pilar":"vitrine","tema":"A","obj":"Apresentar a junção dupla de esgoto","prod":"Tigre · Junção dupla Série R","leg":"Mais de uma entrada em uma só peça. 🚰\n\nJunção dupla Série R · Tigre\n✔ Para esgoto predial\n✔ Série reforçada com anel de borracha\n\nPor R$ 39,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tigre #esgoto #hidraulica #trindadepe"},{"id":"TUB-05","nome":"Linha roscável Tigre","grupo":"tubos","pilar":"vitrine","tema":"C","obj":"Mostrar a família de conexões roscáveis","prod":"Tigre · Conexões roscáveis","leg":"Cada conexão no lugar certo. 🔧\n\nUnião, nípel, cap e bucha de redução roscáveis · Tigre\n✔ Linha roscável para água fria\n✔ Pronta entrega na Castro\n\nConsulte valores na loja ou no WhatsApp.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tigre #conexoes #hidraulica #trindadepe"},{"id":"TUB-06","nome":"Joelho soldável marrom","grupo":"tubos","pilar":"oferta","tema":"C","obj":"Destacar o joelho soldável de água fria","prod":"Tigre · Joelho soldável água fria","leg":"A peça pequena que mantém a casa sem vazamento. 💧\n\nJoelho soldável de água fria · Tigre\n✔ Linha soldável marrom\n✔ Para água fria\n\nPor R$ 4,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tigre #soldavel #hidraulica #trindadepe"},{"id":"TUB-07","nome":"Joelho PPR PN25","grupo":"tubos","pilar":"vitrine","tema":"A","obj":"Vender a linha PPR para água quente e fria","prod":"Tigre · Joelho PPR PN25","leg":"Tubulação durável para água quente e fria. 🔥\n\nJoelho PPR PN25 · Tigre\n✔ Linha PPR verde\n✔ Pressão nominal PN25\n\nPor R$ 34,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tigre #ppr #hidraulica #trindadepe"},{"id":"TUB-08","nome":"Soldável × PPR","grupo":"tubos","pilar":"educativo","tema":"A","obj":"Ajudar a escolher entre soldável e PPR","prod":"Tigre · Soldável × PPR","leg":"Soldável ou PPR? 🤔\n\n🔹 Soldável: água fria, instalação com adesivo\n🔹 PPR: água quente e fria, por termofusão\n\nAs duas da Tigre.\n\nFale com a gente no WhatsApp. 👇\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tigre #ppr #soldavel #trindadepe"},{"id":"TUB-09","nome":"Luva simples Série R","grupo":"tubos","pilar":"educativo","tema":"A","obj":"Dica de instalação com a luva de esgoto","prod":"Tigre · Luva simples Série R","leg":"A luva certa evita vazamento e retrabalho. 🔧\n\nLuva simples Série R · Tigre\n✔ Para esgoto predial\n✔ Encaixe com anel de borracha\n\nPor R$ 9,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tigre #luva #esgoto #trindadepe"},{"id":"ARG-01","nome":"Votomassa AC I","grupo":"argamassas","pilar":"educativo","tema":"C","obj":"Educar: argamassa certa para cerâmica interna","prod":"Votomassa · Votomassa AC I cerâmica interna 20 kg","leg":"Cada obra pede a argamassa certa. 🧱\n\nVotomassa AC I · cerâmica interna (20 kg)\n✔ Cozinhas e banheiros\n✔ Salas e quartos\n✔ Para revestimentos cerâmicos internos\n\nPor R$ 24,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#argamassa #votomassa #obra #trindadepe #sertaodoararipe"},{"id":"ARG-02","nome":"Votomassa AC II","grupo":"argamassas","pilar":"vitrine","tema":"A","obj":"Vender a AC II para áreas internas e externas","prod":"Votomassa · Votomassa AC II cerâmica interna e externa 20 kg","leg":"Uma argamassa para áreas internas e externas. 🏠\n\nVotomassa AC II (20 kg)\n✔ Pisos e paredes\n✔ Drywall\n✔ Revestimentos até 100x100 cm\n\nPor R$ 29,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#acii #votomassa #argamassa #trindadepe"},{"id":"ARG-03","nome":"Votomassa AC III flexível","grupo":"argamassas","pilar":"vitrine","tema":"A","obj":"Apresentar a argamassa flexível para áreas com movimento","prod":"Votomassa · Votomassa AC III flexível 20 kg","leg":"Para áreas com dilatação e movimento, a argamassa flexível dá mais segurança. 💪\n\nVotomassa AC III Flexível (20 kg)\n✔ Interna e externa\n✔ Alta aderência\n\nPor R$ 44,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#aciii #votomassa #argamassaflexivel #trindadepe"},{"id":"ARG-04","nome":"Votomassa grandes formatos","grupo":"argamassas","pilar":"inspiracao","tema":"C","obj":"Indicar a argamassa para porcelanato de grandes formatos","prod":"Votomassa · Votomassa Grandes Formatos branca 20 kg","leg":"Peça grande exige assentamento perfeito. ✨\n\nVotomassa Grandes Formatos · branca (20 kg)\n✔ Porcelanato, granito e pedras naturais\n✔ Mais aderência para peças pesadas\n\nPor R$ 59,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#porcelanato #votomassa #argamassa #trindadepe"},{"id":"ARG-05","nome":"Linha Votomassa","grupo":"argamassas","pilar":"vitrine","tema":"C","obj":"Mostrar a linha completa de argamassas colantes","prod":"","leg":"Escolher a argamassa certa evita retrabalho. 🧱\n\n1️⃣ AC I: cerâmica interna\n2️⃣ AC II: interna e externa\n3️⃣ AC III: flexível\n4️⃣ Grandes Formatos\n\nTudo Votomassa, com pronta entrega na Castro.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#votomassa #argamassa #obra #trindadepe"},{"id":"ARG-06","nome":"AC I × AC II","grupo":"argamassas","pilar":"educativo","tema":"A","obj":"Ajudar a escolher entre AC I e AC II","prod":"","leg":"Qual argamassa usar? Depende de onde o revestimento será aplicado. 🤔\n\n🔹 AC I: ambientes internos\n🔹 AC II: internos e externos, drywall\n\nAs duas são Votomassa.\n\nFale com a gente no WhatsApp. 👇\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#acivsacii #votomassa #argamassa #trindadepe"},{"id":"ARG-07","nome":"Sikalastic-220 W BR","grupo":"argamassas","pilar":"educativo","tema":"A","obj":"Educar: impermeabilizar banheiro e área fria antes do revestimento","prod":"Sika · Sikalastic-220 W BR","leg":"Infiltração começa antes do revestimento. 💧\n\nSikalastic-220 W BR · Sika\n✔ Membrana líquida impermeabilizante\n✔ Para áreas frias como banheiros e cozinhas\n✔ Sem cimento, fácil de aplicar\n\nPor R$ 189,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#sika #impermeabilizante #banheiro #obra #trindadepe"},{"id":"ARG-08","nome":"SikaTop-100","grupo":"argamassas","pilar":"vitrine","tema":"C","obj":"Apresentar a argamassa polimérica impermeabilizante","prod":"Sika · SikaTop-100 argamassa polimérica 18 kg","leg":"Impermeabilização forte para piso, parede e áreas úmidas. 🛠️\n\nSikaTop-100 · Sika (kit 18 kg)\n✔ Argamassa polimérica impermeabilizante\n✔ Rende até 9 m²\n✔ Banheiros, lavanderias e reservatórios\n\nPor R$ 329,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#sika #sikatop #impermeabilizacao #trindadepe"},{"id":"ELE-01","nome":"Refletor LED 50 W","grupo":"eletrica","pilar":"oferta","tema":"A","obj":"Vender o refletor LED para fachada, garagem e quintal","prod":"Tramontina · Refletor LED 50 W IP65","leg":"Fachada, garagem e quintal bem iluminados, com economia de LED. 💡\n\nRefletor LED 50 W · Tramontina\n✔ Potência de 50 W\n✔ Proteção IP65 contra chuva e poeira\n✔ Tecnologia LED\n\nPor R$ 89,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#refletorled #iluminacao #tramontina #trindadepe #sertaodoararipe"},{"id":"ELE-02","nome":"Disjuntor bipolar TR3KA","grupo":"eletrica","pilar":"educativo","tema":"C","obj":"Educar sobre proteção do quadro de luz e vender o disjuntor","prod":"Tramontina · Disjuntor bipolar TR3KA","leg":"Disjuntor certo é segurança para a casa toda. ⚡\n\nDisjuntor bipolar TR3KA · Tramontina\n✔ Protege contra sobrecarga e curto-circuito\n✔ Instalação em trilho no quadro de distribuição\n\nPor R$ 39,90 no cartão ou 10% à vista no Pix.\n\nA instalação deve ser feita por eletricista habilitado.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#disjuntor #eletrica #tramontina #trindadepe"},{"id":"ELE-03","nome":"Tomada Liz na cozinha","grupo":"eletrica","pilar":"vitrine","tema":"F","obj":"Inspirar com a tomada integrada ao ambiente","prod":"Tramontina · Conjunto 4x2 com 1 tomada 2P+T Liz 10 A","leg":"Acabamento discreto, instalação segura. 🔌\n\nConjunto 4x2 com 1 tomada 2P+T · Tramontina Liz\n✔ 10 A · 250 V\n✔ Placa branca que combina com qualquer parede\n\nPor R$ 27,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tomada #tramontinaliz #eletrica #trindadepe"},{"id":"ELE-04","nome":"Placa vertical × horizontal","grupo":"eletrica","pilar":"educativo","tema":"A","obj":"Ajudar a escolher a posição da placa","prod":"","leg":"Vertical ou horizontal? A escolha depende do espaço e do estilo da parede. 🏠\n\n🔹 Vertical: visual alongado, ótima para interruptores\n🔹 Horizontal: visual largo, combina com tomadas\n\nAs duas são Tramontina Liz, brancas, formato 4x2.\n\nQual você prefere? 👇\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tramontinaliz #eletrica #acabamento #trindadepe"},{"id":"ELE-05","nome":"Luminária de emergência LDE 30L","grupo":"eletrica","pilar":"vitrine","tema":"A","obj":"Apresentar a luminária de emergência Intelbras","prod":"Intelbras · Luminária de emergência autônoma LDE 30L","leg":"Segurança para a família e para o comércio, mesmo no apagão. 🔦\n\nLuminária de emergência autônoma LDE 30L · Intelbras\n✔ Acende sozinha quando falta energia\n✔ Autônoma, sem depender da tomada\n\nPor R$ 79,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#luminariadeemergencia #intelbras #seguranca #trindadepe"},{"id":"ELE-06","nome":"Conjunto 2 tomadas Liz 20 A","grupo":"eletrica","pilar":"vitrine","tema":"F","obj":"Mostrar o conjunto de 2 tomadas na cozinha, com preço","prod":"Tramontina · Conjunto 4x2 com 2 tomadas 2P+T 20 A Liz","leg":"Bancada de cozinha pede tomada com potência. 🍳\n\nConjunto 4x2 com 2 tomadas 2P+T · Tramontina Liz (20 A · 250 V)\n✔ Duas tomadas no mesmo conjunto\n✔ Placa branca\n\nPor R$ 36,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tomada #tramontinaliz #cozinha #trindadepe"},{"id":"ELE-07","nome":"Placa 3 postos na sala","grupo":"eletrica","pilar":"inspiracao","tema":"F","obj":"Inspirar o uso de 3 interruptores em uma só placa","prod":"Tramontina · Placa 3 postos 4x2 Liz","leg":"Menos parede riscada, mais organização. 💡\n\nPlaca 3 postos 4x2 · Tramontina Liz\n✔ Abriga interruptores e tomadas\n✔ Branca, combina com qualquer ambiente\n\nPor R$ 29,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#interruptor #tramontinaliz #decoracao #trindadepe"},{"id":"ELE-08","nome":"Tomada no home office","grupo":"eletrica","pilar":"inspiracao","tema":"F","obj":"Inspirar a tomada no home office","prod":"Tramontina · Conjunto 4x2 com 1 tomada 2P+T Liz 10 A","leg":"Notebook, carregador e monitor sempre ao alcance. 💻\n\nConjunto 4x2 com 1 tomada 2P+T · Tramontina Liz (10 A)\n✔ Placa branca discreta\n✔ Instalação padrão 4x2\n\nPor R$ 27,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#homeoffice #tomada #tramontinaliz #trindadepe"},{"id":"COZ-01","nome":"Cuba Quadrum 60 aplicada","grupo":"cozinha","pilar":"vitrine","tema":"F","obj":"Mostrar a cuba inox aplicada na bancada, com preço","prod":"Tramontina · Cuba Design Collection Quadrum 60","leg":"Linhas retas, inox acetinado e muito espaço para lavar a louça do dia a dia. ✨\n\nCuba Quadrum 60 · Tramontina Design Collection\n✔ Aço inox com acabamento acetinado\n✔ Cantos retos, visual moderno\n✔ Combina com granito, quartzo e porcelanato\n\nA partir de R$ 899,90 ou em até 10x sem juros.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#cozinha #cubainox #tramontina #trindadepe #sertaodoararipe"},{"id":"COZ-02","nome":"Oferta monocomando Versatile","grupo":"cozinha","pilar":"oferta","tema":"A","obj":"Vender a torneira gourmet com preço e parcelamento","prod":"Tramontina · Monocomando Versatile para cozinha","leg":"A torneira que deixa a cozinha com cara de restaurante. 👨‍🍳\n\nMonocomando Versatile · Tramontina\n✔ Um só comando para vazão e temperatura\n✔ Bica flexível que alcança a cuba inteira\n✔ Acabamento em inox\n\nPor R$ 499,90 ou em até 10x sem juros.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#torneiragourmet #tramontina #cozinha #trindadepe"},{"id":"COZ-03","nome":"Linha inox Tramontina","grupo":"cozinha","pilar":"vitrine","tema":"C","obj":"Mostrar que a loja tem a família completa de inox para a pia","prod":"","leg":"Tudo o que a sua pia precisa, da mesma marca e no mesmo lugar. 🔧\n\n1️⃣ Cuba Quadrum 60 em inox acetinado\n2️⃣ Tanque de encaixe Hera 34 L\n3️⃣ Válvula Design Collection 4 ½\" com escape\n4️⃣ Dosador de sabão em inox (500 ml)\n\nTudo Tramontina, com pronta entrega na Castro.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#tramontina #inox #cozinha #lavanderia #trindadepe"},{"id":"COZ-04","nome":"Tanque Hera 34 L × Hera Compact 19","grupo":"cozinha","pilar":"educativo","tema":"A","obj":"Ajudar a escolher o tamanho do tanque inox para a área de serviço","prod":"","leg":"Lavanderia grande ou cantinho apertado? Tem tanque inox para os dois casos. 👕\n\n🔹 Hera 34 L (50×40 cm): mais volume para a roupa do dia a dia\n🔹 Hera Compact 19 (40×35 cm): cabe em áreas de serviço pequenas\n\nOs dois são Tramontina, em aço inox escovado, e não enferrujam.\n\nQual combina com a sua casa? Conta pra gente! 👇\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#lavanderia #tanqueinox #tramontina #trindadepe"},{"id":"COZ-05","nome":"Dosador de sabão inox (C Castro)","grupo":"cozinha","pilar":"vitrine","tema":"C","obj":"Vender o acessório de pia (ticket baixo, compra por impulso)","prod":"Tramontina · Dosador de sabão em aço inox 500 ml","leg":"O detergente na pia some do olhar e a bancada fica livre. 🧽\n\nDosador de sabão Tramontina\n✔ Corpo em aço inox\n✔ Recipiente de 500 ml\n✔ Instala na bancada ou na própria cuba\n✔ Abastece por cima, sem tirar da pia\n\nPor R$ 89,90 no cartão ou 10% à vista no Pix.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#cozinhaorganizada #tramontina #inox #trindadepe"},{"id":"COZ-06","nome":"Inspiração cuba embutida","grupo":"cozinha","pilar":"inspiracao","tema":"F","obj":"Inspirar a bancada com cuba de embutir (undermount)","prod":"Tramontina · Cuba de embutir Quadrum 50×40","leg":"Quem já limpou uma pia com cuba embutida não quer outra. 😍\n\nNa instalação por baixo (undermount), a borda da cuba fica escondida sob a pedra: a água e as migalhas vão direto para dentro.\n\nCuba Quadrum 50×40 · Tramontina Design Collection, em inox acetinado.\n\nA partir de R$ 749,90 em até 10x sem juros no cartão.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#cubaembutida #cozinhamoderna #tramontina #trindadepe"},{"id":"INS-01","nome":"Tradição e confiança","grupo":"institucional","pilar":"institucional","tema":"A","obj":"Reforçar tradição, marcas confiáveis e entrega","prod":"","leg":"Quem constrói em Trindade conhece a Castro. 🏗️\n\n✔ Tradição de quem vive da construção\n✔ Marcas líderes do mercado\n✔ Pronta entrega e entrega na região\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#castroconstrucoes #materialdeconstrucao #trindadepe #sertaodoararipe"},{"id":"INS-02","nome":"Mais de 40 anos de obra","grupo":"institucional","pilar":"institucional","tema":"C","obj":"Mostrar a tradição da loja em foto de obra","prod":"","leg":"Vai construir ou reformar? Conte com quem entende de obra. 🏗️\n\nMais de 40 anos ao lado de quem constrói em Trindade-PE.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#castroconstrucoes #construcao #reforma #trindadepe"},{"id":"INS-03","nome":"Parcele a sua obra","grupo":"institucional","pilar":"institucional","tema":"A","obj":"Comunicar a condição de parcelamento","prod":"","leg":"Obra sem aperto no orçamento. 💳\n\n✔ Até 10x sem juros no cartão (compras a partir de R$ 200)\n✔ 10% de desconto à vista no Pix (compras abaixo de R$ 200)\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#parcelamento #semjuros #castroconstrucoes #trindadepe"},{"id":"INS-04","nome":"Portfólio de ambientes","grupo":"institucional","pilar":"institucional","tema":"C","obj":"Mostrar ambientes feitos com os produtos da loja","prod":"","leg":"Pisos, cozinhas, banheiros e acabamentos: veja o que dá para fazer. ✨\n\nChame no WhatsApp e monte o seu projeto com a Castro.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#portfolio #castroconstrucoes #acabamento #trindadepe"},{"id":"INS-05","nome":"Obrigado, profissional","grupo":"institucional","pilar":"institucional","tema":"F","obj":"Valorizar o encanador, o pedreiro e o profissional da obra","prod":"Tramontina · Chave para tubos 14\" Master","leg":"Por trás de toda obra bem feita existe um profissional. 🔧\n\nObrigado por construir a nossa cidade com a gente.\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#profissionais #pedreiro #encanador #castroconstrucoes #trindadepe"},{"id":"INS-06","nome":"Tudo num só lugar","grupo":"institucional","pilar":"institucional","tema":"F","obj":"Mostrar a variedade de linhas da loja","prod":"","leg":"Piso, banheiro, cozinha, elétrica, tintas e ferramentas em um só endereço. 🧱\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#castroconstrucoes #materialdeconstrucao #trindadepe #piso #banheiro #cozinha"},{"id":"INS-07","nome":"Pronta entrega","grupo":"institucional","pilar":"institucional","tema":"A","obj":"Comunicar pronta entrega e atendimento","prod":"","leg":"Faltou material? A Castro resolve. 🚚\n\n✔ Pronta entrega\n✔ Equipe que orienta na escolha\n✔ Atendimento por WhatsApp\n\n📍 Av. Central Norte, 131 · Trindade-PE\n📲 (87) 99999-5985\n\n#prontaentrega #castroconstrucoes #trindadepe #sertaodoararipe #obra #materiais"}],"plano":["PIS-13","BAN-08","PIS-18","BAN-02","PIS-17","TIN-06","PIS-07","FER-09","PIS-09","BAN-04","PIS-14","BAN-10","PIS-03","TIN-04","PIS-04","FER-10","PIS-19","TUB-02","TIN-02","BAN-05","PIS-11","PIS-08","TUB-04","ARG-05","ELE-02","PIS-10","FER-02","ARG-07","TIN-10","PIS-12","ELE-07","BAN-03","INS-04","PIS-05","TUB-03","FER-08","TUB-08","COZ-03","ELE-03","INS-06","FER-01","BAN-12","PIS-15","BAN-11","TIN-07","ARG-02","FER-05","ELE-06","PIS-06","ARG-06","TIN-01","TUB-06","COZ-01","INS-01","FER-07","TIN-03","COZ-06","ELE-08","COZ-04","BAN-06","ARG-01","FER-03","INS-03","TIN-05","TUB-05","BAN-01","ARG-08","ELE-05","PIS-02","TUB-01","INS-05","TUB-07","TIN-09","BAN-07","FER-06","PIS-01","ELE-01","COZ-05","INS-02","ARG-04","ELE-04","BAN-09","PIS-20","COZ-02","TUB-09","FER-04","PIS-16","TIN-08","INS-07","ARG-03"]};
-const PILARES = { vitrine: 'Vitrine', inspiracao: 'Inspiração', educativo: 'Educativo', oferta: 'Oferta', institucional: 'Institucional' };
-const porId = new Map(D.posts.map((p) => [p.id, p]));
-const nomeGrupo = (g) => (D.grupos.find((x) => x[0] === g) || [, g])[1];
-const img = (id) => `m/${id}.jpg`;
-const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-const $ = (s) => document.querySelector(s);
-function el(tag, attrs = {}, ...filhos) {
-  const e = document.createElement(tag);
-  for (const [k, v] of Object.entries(attrs)) { if (k.startsWith('on')) e.addEventListener(k.slice(2), v); else if (v !== false && v != null) e.setAttribute(k, v); }
-  e.append(...filhos.flat().filter((f) => f != null)); return e;
-}
-const E = { aba: 'modelos', grupo: 'todos', pilar: '', termo: '', lista: [], i: -1 };
-const vista = $('#vista');
-
-function abrir(lista, i) { E.lista = lista; E.i = i; pintarDet(); $('#det').hidden = false; $('#fechar').focus(); }
-function pintarDet() {
-  const p = porId.get(E.lista[E.i]);
-  $('#dImg').src = `g/${p.id}.jpg`; aviso(''); $('#dImg').alt = `Arte ${p.id}: ${p.nome}`;
-  $('#dTag').textContent = `${p.id} · ${nomeGrupo(p.grupo)} · ${PILARES[p.pilar] || p.pilar}`;
-  $('#dNome').textContent = p.nome; $('#dProd').textContent = p.prod; $('#dObj').textContent = p.obj;
-  $('#dLeg').textContent = p.leg;
-  $('#dAnt').disabled = E.i === 0; $('#dProx').disabled = E.i === E.lista.length - 1;
-}
-// ───────── Canva e exportação (tudo no celular; os arquivos já estão prontos no site) ─────────
-const slug = (s) => norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-const atualP = () => porId.get(E.lista[E.i]);
-const nomeArq = (p) => `${p.id}-${slug(p.nome)}`.slice(0, 70);
-const aviso = (t) => { $('#dAviso').textContent = t; };
-async function buscar(url) { const r = await fetch(url); if (!r.ok) throw new Error('arquivo não encontrado'); return r.blob(); }
-const baixarBlob = (blob, nome) => {
-  const a = el('a', { href: URL.createObjectURL(blob), download: nome }); document.body.append(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 8000);
-};
-async function comoPNG(jpg) {
-  const bmp = await createImageBitmap(jpg); const cv = document.createElement('canvas'); cv.width = bmp.width; cv.height = bmp.height;
-  cv.getContext('2d').drawImage(bmp, 0, 0); bmp.close(); return new Promise((ok) => cv.toBlob(ok, 'image/png'));
-}
-// PDF de 1 página (1080x1440 pt... em pontos 810x1080) com o JPG embutido, sem biblioteca
-async function comoPDF(jpg) {
-  const bytes = new Uint8Array(await jpg.arrayBuffer()); const W = 1080, H = 1440; const enc = new TextEncoder(); const partes = []; const pos = []; let len = 0;
-  const add = (x) => { const b = typeof x === 'string' ? enc.encode(x) : x; partes.push(b); len += b.length; };
-  const obj = (n, corpo) => { pos[n] = len; add(`${n} 0 obj\n${corpo}\nendobj\n`); };
-  add('%PDF-1.4\n');
-  obj(1, '<< /Type /Catalog /Pages 2 0 R >>'); obj(2, '<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
-  obj(3, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W * .75} ${H * .75}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>`);
-  pos[4] = len; add(`4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${W} /Height ${H} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`); add(bytes); add('\nendstream\nendobj\n');
-  const c = `q ${W * .75} 0 0 ${H * .75} 0 0 cm /Im0 Do Q`; obj(5, `<< /Length ${c.length} >>\nstream\n${c}\nendstream`);
-  const xr = len; add(`xref\n0 6\n0000000000 65535 f \n${[1, 2, 3, 4, 5].map((n) => String(pos[n]).padStart(10, '0') + ' 00000 n \n').join('')}trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`);
-  return new Blob(partes, { type: 'application/pdf' });
-}
-async function compartilhar(arquivo, titulo) {
-  if (navigator.canShare && navigator.canShare({ files: [arquivo] })) { await navigator.share({ files: [arquivo], title: titulo }); return true; }
-  return false;
-}
-async function ocupado(botao, rotulo, fn) {
-  const t = botao.textContent; botao.disabled = true; if (rotulo) botao.textContent = rotulo;
-  try { await fn(); } catch (e) { if (e && e.name !== 'AbortError') aviso('Não deu certo: ' + e.message); } finally { botao.disabled = false; botao.textContent = t; }
-}
-// 1º caminho: menu Compartilhar do Android com o .pptx (o app do Canva aparece na lista e abre a arte editável)
-$('#dCanva').onclick = () => ocupado($('#dCanva'), 'Preparando…', async () => {
-  const p = atualP(); aviso('');
-  const arq = new File([await buscar(`p/${p.id}.pptx`)], `${nomeArq(p)}.pptx`, { type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' });
-  if (await compartilhar(arq, p.nome)) return;
-  baixarBlob(arq, arq.name); aviso('Este aparelho não tem o menu Compartilhar. O arquivo foi baixado: no Canva, toque em Criar > Enviar arquivo e escolha-o.');
-  setTimeout(abrirCanva, 1200);
-});
-// 2º caminho: baixa o .pptx e abre o app do Canva (Android) ou o site do Canva
-function abrirCanva() {
-  if (/android/i.test(navigator.userAgent)) location.href = 'intent://www.canva.com/#Intent;scheme=https;package=com.canva.editor;S.browser_fallback_url=https%3A%2F%2Fwww.canva.com%2F;end';
-  else window.open('https://www.canva.com/', '_blank', 'noopener');
-}
-$('#dCanva2').onclick = () => ocupado($('#dCanva2'), 'Baixando…', async () => {
-  const p = atualP(); baixarBlob(await buscar(`p/${p.id}.pptx`), `${nomeArq(p)}.pptx`);
-  aviso('Arquivo baixado. No Canva: Criar > Enviar arquivo > escolha o .pptx baixado.'); setTimeout(abrirCanva, 1500);
-});
-document.querySelectorAll('[data-fmt]').forEach((b) => { b.onclick = () => ocupado(b, '…', async () => {
-  const p = atualP(), f = b.dataset.fmt, nome = nomeArq(p); aviso('');
-  if (f === 'pptx') baixarBlob(await buscar(`p/${p.id}.pptx`), `${nome}.pptx`);
-  else if (f === 'jpg') baixarBlob(await buscar(`g/${p.id}.jpg`), `${nome}.jpg`);
-  else if (f === 'png') baixarBlob(await comoPNG(await buscar(`g/${p.id}.jpg`)), `${nome}.png`);
-  else if (f === 'pdf') baixarBlob(await comoPDF(await buscar(`g/${p.id}.jpg`)), `${nome}.pdf`);
-  else { const arq = new File([await buscar(`g/${p.id}.jpg`)], `${nome}.jpg`, { type: 'image/jpeg' }); if (!(await compartilhar(arq, p.nome))) { baixarBlob(arq, arq.name); aviso('Imagem baixada.'); } }
-}); });
-const fechar = () => { $('#det').hidden = true; };
-$('#fechar').onclick = fechar;
-$('#det').addEventListener('click', (e) => { if (e.target.id === 'det') fechar(); });
-$('#dAnt').onclick = () => { if (E.i > 0) { E.i--; pintarDet(); } };
-$('#dProx').onclick = () => { if (E.i < E.lista.length - 1) { E.i++; pintarDet(); } };
-$('#dCopiar').onclick = async () => {
-  const b = $('#dCopiar');
-  try { await navigator.clipboard.writeText($('#dLeg').textContent); b.textContent = 'Copiada'; }
-  catch { const r = document.createRange(); r.selectNodeContents($('#dLeg')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selecionada: Ctrl+C'; }
-  setTimeout(() => { b.textContent = 'Copiar'; }, 2000);
-};
-document.addEventListener('keydown', (e) => {
-  if ($('#det').hidden) return;
-  if (e.key === 'Escape') fechar(); else if (e.key === 'ArrowLeft') $('#dAnt').click(); else if (e.key === 'ArrowRight') $('#dProx').click();
-});
-
-function vModelos() {
-  const filtra = () => D.posts.filter((p) => (E.grupo === 'todos' || p.grupo === E.grupo) && (!E.pilar || p.pilar === E.pilar)
-    && (!E.termo || norm([p.id, p.nome, p.prod, p.obj, p.leg].join(' ')).includes(norm(E.termo))));
-  const topo = el('div', { class: 'filtros' });
-  const grade = el('div', { class: 'grade' });
-  const pintar = () => {
-    topo.textContent = '';
-    const ops = [['todos', 'Todos', D.posts.length], ...D.grupos.map(([g, n]) => [g, n, D.posts.filter((p) => p.grupo === g).length])];
-    for (const [g, n, q] of ops) topo.append(el('button', { class: 'chip', 'aria-pressed': E.grupo === g, onclick: () => { E.grupo = g; pintar(); } }, n, el('small', {}, String(q))));
-    const sel = el('select', { class: 'campo', id: 'selPilar', 'aria-label': 'Filtrar por tipo de post', onchange: (e) => { E.pilar = e.target.value; pintar(); } },
-      el('option', { value: '' }, 'Todos os tipos'), ...Object.entries(PILARES).map(([k, n]) => el('option', { value: k, selected: E.pilar === k }, n)));
-    const busca = el('input', { class: 'campo busca', id: 'busca', type: 'search', placeholder: 'Buscar por produto, marca, texto', value: E.termo, 'aria-label': 'Buscar', oninput: (e) => { E.termo = e.target.value; lista(); } });
-    topo.append(sel, busca);
-    lista();
+(function () {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const el = (tag, props = {}, ...filhos) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(props)) {
+      if (k === 'class') n.className = v; else if (k === 'html') n.innerHTML = v; else if (k.startsWith('on')) n.addEventListener(k.slice(2), v); else if (v != null && v !== false) n.setAttribute(k, v === true ? '' : v);
+    }
+    for (const f of filhos.flat()) if (f != null) n.append(f.nodeType ? f : document.createTextNode(f));
+    return n;
   };
-  const lista = () => {
-    const l = filtra(); grade.textContent = '';
-    if (!l.length) { grade.append(el('div', { class: 'vazio' }, 'Nenhuma arte com esse filtro.')); return; }
-    const ids = l.map((p) => p.id);
-    l.forEach((p, i) => grade.append(el('button', { class: 'card', onclick: () => abrir(ids, i) },
-      el('img', { src: img(p.id), alt: '', loading: 'lazy', width: 480, height: 640 }),
-      el('div', { class: 'leg' }, el('b', {}, p.id), el('span', {}, p.nome)))));
+  const sem = (t) => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const slug = (t) => sem(t).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+  const svg = (d) => `<svg class="ic" viewBox="0 0 24 24">${d}</svg>`;
+  const ICONES = {
+    geral: svg('<path d="M3 11l9-8 9 8v9a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2z"/>'),
+    modelos: svg('<rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/>'),
+    feed: svg('<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/>'),
+    marca: svg('<path d="M12 3s6 6.2 6 10.5A6 6 0 0 1 6 13.5C6 9.2 12 3 12 3z"/>'),
+    canva: svg('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'),
   };
-  vista.append(topo, grade); pintar();
-}
+  const VISTAS = [['geral', 'Visão geral'], ['modelos', 'Modelos'], ['feed', 'Feed'], ['marca', 'Marca']];
+  const PILARES = { vitrine: 'Vitrine', inspiracao: 'Inspiração', educativo: 'Educativo', oferta: 'Oferta', institucional: 'Institucional' };
+  const TEMAS_ARTE = { A: 'Azul', C: 'Claro', F: 'Foto' };
+  const MODELOS = D.posts.map((p) => ({ id: p.id, nome: p.nome, grupo: p.grupo, pilar: p.pilar, tema: p.tema, objetivo: p.obj, produto: p.prod, legenda: p.leg }));
+  const porId = new Map(MODELOS.map((m) => [m.id, m]));
+  const GRUPOS = D.grupos.filter(([g]) => MODELOS.some((m) => m.grupo === g));
+  const nomeGrupo = (g) => (D.grupos.find((x) => x[0] === g) || [, g])[1];
+  const PLANO = D.plano.filter((id) => porId.has(id));
+  const E = { vista: 'geral', grupo: 'todos', pilar: '', termo: '', lista: [], atual: -1 };
+  const mini = (id) => `m/${id}.jpg`, cheia = (id) => `g/${id}.jpg`, pptxUrl = (id) => `p/${id}.pptx`;
+  let tAviso;
+  function aviso(msg, tipo = '', ms = 5000) {
+    const a = $('#aviso'); a.textContent = msg; a.className = tipo; a.hidden = false;
+    clearTimeout(tAviso); if (ms) tAviso = setTimeout(() => { a.hidden = true; }, ms);
+  }
+  const msg = (t) => { $('#dMsg').textContent = t || ''; };
 
-function vFeed() {
-  const ordem = D.plano;
-  vista.append(
-    el('div', { class: 'perfil' }, el('div', { class: 'av', 'aria-hidden': 'true' }, 'C'),
-      el('div', {}, el('h2', {}, 'castro.construcoes'), el('p', {}, 'Materiais de construção · Trindade-PE'),
-        el('div', { class: 'n' }, el('span', {}, el('b', {}, '90 '), 'publicações'), el('span', {}, el('b', {}, '9 '), 'grupos')))),
-    el('div', { class: 'feed' }, ordem.map((id, i) => el('button', { 'aria-label': `Publicação ${id}`, onclick: () => abrir(ordem, i) },
-      el('img', { src: img(id), alt: '', loading: 'lazy', width: 480, height: 640 }), el('span', { class: 'ord' }, `#${90 - i}`)))),
-    el('p', { class: 'nota-feed' }, 'Grade na ordem do plano: a primeira arte a publicar é a última, lá embaixo (#1). Publica-se de baixo para cima.'));
-}
+  // Tema (azul · claro · escuro, igual ao painel)
+  const TEMAS = [['azul', 'Azul'], ['claro', 'Claro'], ['escuro', 'Escuro']];
+  function setTema(t) {
+    document.documentElement.dataset.theme = t;
+    try { localStorage.setItem('castro.repo.tema', t); } catch (e) { /* sem armazenamento */ }
+    $('#temas').querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.t === t));
+    const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = t === 'claro' ? '#FFFFFF' : t === 'escuro' ? '#09090A' : '#001A33';
+  }
+  $('#temas').append(...TEMAS.map(([t, n]) => el('button', { 'data-t': t, onclick: () => setTema(t) }, n)));
+  let salvo = 'azul'; try { salvo = localStorage.getItem('castro.repo.tema') || 'azul'; } catch (e) { /* */ }
+  setTema(TEMAS.some((x) => x[0] === salvo) ? salvo : 'azul');
 
-function vMarca() {
-  const cor = (n, h, c) => el('div', { class: 'cor', style: `background:${h};color:${c}` }, `${n} ${h}`);
-  vista.append(el('div', { class: 'marca-grid' },
-    el('div', { class: 'bloco' }, el('h3', {}, 'Cores'), el('div', { class: 'cores' }, cor('Azul', '#005FAC', '#fff'), cor('Vermelho', '#E63A30', '#fff'), cor('Prata', '#C5C6CB', '#0C2238')),
-      el('p', {}, 'O vermelho entra só como acento; o azul conduz a arte.')),
-    el('div', { class: 'bloco' }, el('h3', {}, 'Fonte das artes'), el('div', { class: 'amostra' }, 'Fira Sans'),
-      el('p', {}, 'Regular e Bold, igual no painel, no PowerPoint e no Canva grátis. A logo e o "C" são imagens originais, nunca fonte.')),
-    el('div', { class: 'bloco' }, el('h3', {}, 'Regras que valem para todas'),
-      el('ul', { class: 'regras' },
-        el('li', {}, 'Fotos só oficiais dos fabricantes, produto e aplicação do mesmo produto.'),
-        el('li', {}, 'Peça cerâmica sempre no formato real da medida (20×120 nunca quadrada).'),
-        el('li', {}, 'Logo direto sobre a foto, sem caixa branca, na cor de maior contraste.'),
-        el('li', {}, 'Preços das artes são exemplos; a loja confirma antes de postar.')))));
-}
+  // Navegação
+  $('#tabbar').append(...VISTAS.map(([v, nome]) => el('button', { 'data-v': v, onclick: () => ir(v), html: ICONES[v] + `<span>${nome}</span>` })));
+  function ir(v) { if (location.hash !== '#/' + v) location.hash = '#/' + v; else desenhar(); }
+  window.addEventListener('hashchange', desenhar);
+  const view = $('#view');
+  function desenhar() {
+    const v = (location.hash.match(/^#\/(\w+)/) || [])[1];
+    E.vista = VISTAS.some((x) => x[0] === v) ? v : 'geral';
+    document.querySelectorAll('[data-v]').forEach((b) => b.classList.toggle('on', b.dataset.v === E.vista));
+    view.textContent = ''; window.scrollTo(0, 0);
+    ({ geral: vGeral, modelos: vModelos, feed: vFeed, marca: vMarca })[E.vista]();
+  }
+  const peca = (m, lista, i, extra) => el('div', { class: 'peca', 'data-m': m.id, title: `${m.id} · ${m.nome}`, onclick: () => abrir(lista, i) },
+    el('img', { src: mini(m.id), alt: `${m.id} ${m.nome}`, loading: 'lazy', decoding: 'async', width: 480, height: 640 }), ...(extra || []));
+  const contar = (campo) => { const o = {}; for (const m of MODELOS) o[m[campo]] = (o[m[campo]] || 0) + 1; return o; };
+  const barra = (rot, n, max, onclick, verm) => el('button', { class: 'barra' + (verm ? ' verm' : ''), onclick }, el('span', {}, rot), el('span', { class: 't' }, el('i', { style: `width:${Math.round((100 * n) / max)}%` })), el('b', {}, String(n)));
+  const kpi = (n, l, dest) => el('div', { class: 'card kpi' + (dest ? ' dest' : '') }, el('div', { class: 'n' }, String(n)), el('div', { class: 'l' }, l));
+  const atalho = (ic, t, d, fn) => el('button', { class: 'card atalho', onclick: fn }, el('div', { class: 'bolha', html: ICONES[ic] }), el('div', {}, el('b', {}, t), el('span', {}, d)));
 
-function ir(aba) {
-  E.aba = aba; vista.textContent = '';
-  document.querySelectorAll('#abas button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.aba === aba)));
-  ({ modelos: vModelos, feed: vFeed, marca: vMarca })[aba]();
-}
-document.querySelectorAll('#abas button').forEach((b) => b.addEventListener('click', () => ir(b.dataset.aba)));
-ir('modelos');
+  function vGeral() {
+    const porGrupo = contar('grupo'), porPilar = contar('pilar'), porTema = contar('tema');
+    const prox = PLANO.slice(-6).reverse().map((id) => porId.get(id));
+    const g = el('div', { class: 'recentes' }); prox.forEach((m, i) => g.append(peca(m, prox, i)));
+    view.append(
+      el('div', { class: 'saudacao' }, el('div', {}, el('h1', { html: 'Repositório <em>Castro</em>' }),
+        el('p', {}, `${MODELOS.length} artes prontas do Instagram, com fonte e cores da marca. Escolha uma, abra no Canva e edite lá. Também dá para exportar em JPG, PNG, PPTX e PDF.`))),
+      el('div', { class: 'kpis' }, kpi(MODELOS.length, 'Artes prontas', true), kpi(GRUPOS.length, 'Grupos de produtos'),
+        kpi(`${MODELOS.length}/${MODELOS.length}`, 'Já preparadas para o Canva'), kpi('1080×1440', 'Formato (3:4, Instagram)')),
+      el('h2', { class: 'sec' }, 'Atalhos'),
+      el('div', { class: 'atalhos' },
+        atalho('modelos', 'Ver os modelos', 'Galeria com busca e filtro por grupo de produto.', () => ir('modelos')),
+        atalho('feed', 'Ver o feed', 'O perfil do Instagram com todas as artes, na ordem de publicação.', () => ir('feed')),
+        atalho('canva', 'Abrir no Canva', 'Em qualquer arte, o botão envia o arquivo ao app do Canva.', () => ir('modelos')),
+        atalho('marca', 'Marca e cores', 'Cores, fontes e logos usados nas artes e neste painel.', () => ir('marca'))),
+      el('div', { class: 'duas' },
+        el('div', { class: 'card' }, el('h2', { class: 'sec' }, 'Artes por grupo'), el('div', { class: 'barras' },
+          GRUPOS.map(([g2, n]) => barra(n, porGrupo[g2] || 0, Math.max(...Object.values(porGrupo)), () => { E.grupo = g2; ir('modelos'); })))),
+        el('div', { class: 'card' }, el('h2', { class: 'sec' }, 'Pilares e temas'), el('div', { class: 'barras' },
+          Object.entries(PILARES).filter(([k]) => porPilar[k]).map(([k, n]) => barra(n, porPilar[k], MODELOS.length, () => { E.pilar = k; E.grupo = 'todos'; ir('modelos'); }, true)),
+          el('div', { style: 'height:6px' }),
+          Object.entries(TEMAS_ARTE).filter(([k]) => porTema[k]).map(([k, n]) => barra('Arte ' + n.toLowerCase(), porTema[k], MODELOS.length, () => ir('modelos')))))),
+      el('h2', { class: 'sec', style: 'margin-top:22px' }, 'Próximas a publicar'), g);
+  }
+
+  const indice = new Map(MODELOS.map((m) => [m.id, sem([m.id, m.nome, m.objetivo, m.produto, nomeGrupo(m.grupo), PILARES[m.pilar], m.legenda].join(' '))]));
+  let modelosPintar = null;
+  function vModelos() {
+    $('#busca').value = E.termo;
+    const lista = () => MODELOS.filter((m) => (E.grupo === 'todos' || m.grupo === E.grupo) && (!E.pilar || m.pilar === E.pilar)
+      && sem(E.termo).split(/\s+/).filter(Boolean).every((p) => indice.get(m.id).includes(p)));
+    const topo = el('div', { class: 'filtros' }), grade = el('div', { class: 'grade' }), cont = el('div', { class: 'contagem', style: 'margin:-6px 0 12px' });
+    function pintar() {
+      topo.textContent = '';
+      const ops = [['todos', 'Todos', MODELOS.length], ...GRUPOS.map(([g, n]) => [g, n, MODELOS.filter((m) => m.grupo === g).length])];
+      for (const [g, n, q] of ops) topo.append(el('button', { class: 'chip' + (E.grupo === g ? ' on' : ''), onclick: () => { E.grupo = g; pintar(); } }, n, el('small', {}, String(q))));
+      topo.append(el('select', { class: 'sel', 'aria-label': 'Pilar', onchange: (e) => { E.pilar = e.target.value; pintar(); } },
+        el('option', { value: '' }, 'Todos os pilares'), ...Object.entries(PILARES).map(([k, n]) => el('option', { value: k, selected: E.pilar === k }, n))));
+      const l = lista(); cont.textContent = `${l.length} de ${MODELOS.length} artes`;
+      grade.textContent = '';
+      if (!l.length) grade.append(el('div', { class: 'vazio' }, 'Nenhuma arte encontrada. Tente outra palavra.'));
+      l.forEach((m, i) => grade.append(el('div', { class: 'item' }, peca(m, l, i), el('div', { class: 'leg', onclick: () => abrir(l, i) }, el('b', {}, m.id), m.nome))));
+    }
+    view.append(topo, cont, grade); pintar(); modelosPintar = pintar;
+  }
+  let tBusca;
+  $('#busca').addEventListener('input', (e) => {
+    E.termo = e.target.value;
+    if (E.vista !== 'modelos') { ir('modelos'); return; }
+    clearTimeout(tBusca); tBusca = setTimeout(() => modelosPintar && modelosPintar(), 160);
+  });
+
+  function vFeed() {
+    const n = PLANO.length, lista = PLANO.map((x) => porId.get(x));
+    const grade = el('div', { class: 'feed-grade' });
+    PLANO.forEach((id, i) => grade.append(peca(porId.get(id), lista, i, [el('span', { class: 'num' }, `#${n - i}`)])));
+    view.append(el('div', { class: 'perfil' },
+      el('div', { class: 'perfil-topo' },
+        el('div', { class: 'perfil-avatar' }, el('img', { src: 'marca/logos/avatar.png', alt: '' })),
+        el('div', { class: 'perfil-info' },
+          el('div', { class: 'perfil-nome' }, el('h1', {}, 'castro.construcoes'), el('button', { class: 'chip', onclick: () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) }, 'Ir para a primeira arte ↓')),
+          el('div', { class: 'perfil-stats' }, el('span', {}, el('b', {}, String(n)), ' publicações'), el('span', {}, el('b', {}, '40+'), ' anos de tradição')),
+          el('div', { class: 'perfil-bio', html: '<b>Castro Construções</b><br>A loja que conhece a sua obra.<br>Pisos, tintas, banheiro, ferramentas e mais.<br>Av. Central Norte, 131 · Trindade-PE' }))),
+      el('div', { class: 'destaques' }, GRUPOS.map(([g, nome]) => el('div', { class: 'destaque' }, el('i', {}, nome.slice(0, 1)), nome.split(/ e | /)[0]))),
+      el('div', { class: 'feed-aviso' }, 'As artes são publicadas de baixo para cima. Role até o final para ver a primeira.'),
+      grade,
+      el('div', { class: 'feed-fim' }, el('b', {}, 'Fim do feed.'), ' A última arte da grade (#1) é a primeira a ser publicada.')));
+  }
+
+  const CORES = [['Azul Castro', '#005FAC'], ['Azul claro', '#3395D4'], ['Azul marinho', '#001830'], ['Azul profundo', '#000F20'], ['Vermelho telhado', '#E63A30'], ['Prata aço', '#C5C6CB']];
+  function vMarca() {
+    const cor = (n, h) => el('div', { class: 'cor' }, el('i', { style: `background:${h}` }), el('div', {}, el('b', {}, n), h));
+    const logo = (f, fundo) => el('div', { style: `background:${fundo}` }, el('img', { src: 'marca/' + f, alt: f }));
+    view.append(
+      el('h2', { class: 'sec' }, 'Cores da marca'), el('div', { class: 'cores' }, CORES.map(([n, h]) => cor(n, h))),
+      el('p', { class: 'nota' }, 'O vermelho é só acento (no máximo 10% da arte). Estas cores e os 3 temas deste painel (azul, claro e escuro) vêm do projeto Site.'),
+      el('h2', { class: 'sec', style: 'margin-top:24px' }, 'Fontes'),
+      el('div', { class: 'tipos' },
+        el('div', { class: 'card' }, el('b', {}, 'Nas artes: Fira Sans'), el('div', { class: 'amostra', style: "font-family:'Fira Sans';font-weight:700" }, 'Cement Grigio 88×88'),
+          el('div', { style: "font-family:'Fira Sans'" }, 'no cartão ou 10% à vista no Pix'), el('p', { class: 'nota' }, 'Regular e Bold. Grátis no Canva: a arte fica igual no repositório, no PowerPoint e no Canva.')),
+        el('div', { class: 'card' }, el('b', {}, 'Neste painel e no site: Bale + Inter'), el('div', { class: 'amostra', style: 'font-family:var(--font-title)' }, 'A loja que conhece a sua obra'),
+          el('div', {}, 'Textos em Inter, títulos em Bale Bold.'), el('p', { class: 'nota' }, 'As mesmas fontes do projeto Site.'))),
+      el('h2', { class: 'sec', style: 'margin-top:24px' }, 'Logo e "C" da marca'),
+      el('div', { class: 'logos' }, logo('logos/azul.png', '#F4F6F9'), logo('logos/branca.png', '#00203F'), logo('logos/preta.png', '#F4F6F9'), logo('logos/vermelha.png', '#FFFFFF'),
+        logo('elementos/c-castro-vermelho.png', '#FFFFFF'), logo('elementos/c-castro-branco.png', '#005FAC')),
+      el('p', { class: 'nota' }, 'Logo e "C" são imagens originais: nunca refazer, esticar ou recolorir.'));
+  }
+
+  // ───────── Detalhe ─────────
+  const atual = () => E.lista[E.atual];
+  const arquivos = new Map(); // id -> Promise<File> do .pptx, baixado de antemão: o menu Compartilhar do Android exige toque "fresco" (sem await de rede)
+  const PPTX_TIPO = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+  const nomeArq = (m) => slug(m.id + '-' + m.nome);
+  const prontos = new Map(); // id -> File já carregado
+  function pegarPPTX(m) {
+    if (!arquivos.has(m.id)) {
+      const p = fetch(pptxUrl(m.id)).then((r) => { if (!r.ok) throw new Error('arquivo não encontrado'); return r.blob(); })
+        .then((b) => { const f = new File([b], nomeArq(m) + '.pptx', { type: PPTX_TIPO }); prontos.set(m.id, f); return f; });
+      p.catch(() => arquivos.delete(m.id)); arquivos.set(m.id, p);
+      while (arquivos.size > 4) { const k = arquivos.keys().next().value; arquivos.delete(k); prontos.delete(k); }
+    }
+    return arquivos.get(m.id);
+  }
+  function abrir(lista, i) {
+    if (i < 0 || i >= lista.length) return;
+    E.lista = lista; E.atual = i; const m = lista[i];
+    if ($('#detalhe').hidden) history.pushState({ det: 1 }, '');
+    $('#detalhe').hidden = false; document.body.style.overflow = 'hidden'; $('.caixa').scrollTop = 0;
+    $('#infoCod').textContent = `${m.id} · ${nomeGrupo(m.grupo)}`;
+    $('#infoNome').textContent = m.nome; $('#infoObj').textContent = m.objetivo || ''; $('#infoProd').textContent = m.produto || '';
+    $('#infoLegenda').value = m.legenda || ''; msg('');
+    const im = $('#dImg'); im.src = mini(m.id); im.alt = `${m.id} ${m.nome}`;
+    const grande = new Image(); grande.onload = () => { if (atual() === m) im.src = grande.src; }; grande.src = cheia(m.id);
+    $('#btAnt').disabled = i === 0; $('#btProx').disabled = i === lista.length - 1;
+    const b = $('#btCanva');
+    if (prontos.has(m.id)) { b.disabled = false; b.textContent = 'Abrir no Canva'; return; }
+    b.disabled = true; b.textContent = 'Preparando o arquivo…';
+    pegarPPTX(m).then(() => { if (atual() === m) { b.disabled = false; b.textContent = 'Abrir no Canva'; } },
+      () => { if (atual() === m) { b.disabled = false; b.textContent = 'Abrir no Canva'; msg('Sem internet ou arquivo indisponível. Tente de novo.'); } });
+  }
+  function fechar() { $('#detalhe').hidden = true; document.body.style.overflow = ''; E.atual = -1; }
+  $('#btFechar').onclick = () => { if (history.state && history.state.det) history.back(); else fechar(); };
+  $('#btAnt').onclick = () => abrir(E.lista, E.atual - 1);
+  $('#btProx').onclick = () => abrir(E.lista, E.atual + 1);
+  window.addEventListener('popstate', () => { if (!$('#detalhe').hidden) fechar(); });
+
+  const baixarLink = (url, nome) => { const a = el('a', { href: url, download: nome }); document.body.append(a); a.click(); a.remove(); };
+  const baixarBlob = (blob, nome) => { const u = URL.createObjectURL(blob); baixarLink(u, nome); setTimeout(() => URL.revokeObjectURL(u), 10000); };
+  function abrirAppCanva() {
+    if (/android/i.test(navigator.userAgent)) location.href = 'intent://www.canva.com/#Intent;scheme=https;package=com.canva.editor;S.browser_fallback_url=' + encodeURIComponent('https://www.canva.com/') + ';end';
+    else window.open('https://www.canva.com/', '_blank', 'noopener');
+  }
+
+  // ABRIR NO CANVA: o .pptx já está carregado, então o menu Compartilhar abre NO MESMO TOQUE (sem esperar rede): é isso que evita o "Permission denied".
+  $('#btCanva').onclick = async () => {
+    const m = atual(); if (!m) return; msg('');
+    const arq = prontos.get(m.id);
+    if (!arq) { msg('Ainda preparando o arquivo. Espere o botão ficar ativo e toque de novo.'); return; }
+    try {
+      if (!(navigator.canShare && navigator.canShare({ files: [arq] }))) throw new Error('sem-share');
+      await navigator.share({ files: [arq], title: m.nome });
+    } catch (e) {
+      if (e && e.name === 'AbortError') return;
+      baixarLink(pptxUrl(m.id), arq.name);
+      msg('O menu do Android não abriu. Baixei o arquivo (pasta Downloads): no Canva, toque em Criar > Enviar arquivo e escolha o .pptx.');
+      setTimeout(abrirAppCanva, 2500);
+    }
+  };
+  $('#btCanva2').onclick = () => {
+    const m = atual(); if (!m) return;
+    baixarLink(pptxUrl(m.id), nomeArq(m) + '.pptx');
+    msg('Arquivo baixado (pasta Downloads). No Canva: Criar > Enviar arquivo > escolha o .pptx.'); setTimeout(abrirAppCanva, 2500);
+  };
+
+  async function buscar(url) { const r = await fetch(url); if (!r.ok) throw new Error('arquivo não encontrado'); return r.blob(); }
+  async function comoPNG(jpg) {
+    const bmp = await createImageBitmap(jpg), cv = document.createElement('canvas'); cv.width = bmp.width; cv.height = bmp.height;
+    cv.getContext('2d').drawImage(bmp, 0, 0); bmp.close(); return new Promise((ok) => cv.toBlob(ok, 'image/png'));
+  }
+  async function comoPDF(jpg) {
+    const bytes = new Uint8Array(await jpg.arrayBuffer()), W = 1080, H = 1440, PW = W * .75, PH = H * .75, enc = new TextEncoder(), partes = [], off = []; let pos = 0;
+    const add = (x) => { const b = typeof x === 'string' ? enc.encode(x) : x; partes.push(b); pos += b.length; };
+    const obj = (n, c) => { off[n] = pos; add(`${n} 0 obj\n${c}\nendobj\n`); };
+    add('%PDF-1.4\n'); obj(1, '<< /Type /Catalog /Pages 2 0 R >>'); obj(2, '<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
+    obj(3, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>`);
+    off[4] = pos; add(`4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${W} /Height ${H} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`); add(bytes); add('\nendstream\nendobj\n');
+    const c = `q ${PW} 0 0 ${PH} 0 0 cm /Im0 Do Q`; obj(5, `<< /Length ${c.length} >>\nstream\n${c}\nendstream`);
+    const xr = pos; add('xref\n0 6\n0000000000 65535 f \n'); for (let n = 1; n <= 5; n++) add(String(off[n]).padStart(10, '0') + ' 00000 n \n');
+    add(`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`); return new Blob(partes, { type: 'application/pdf' });
+  }
+  document.querySelectorAll('[data-fmt]').forEach((b) => b.addEventListener('click', async () => {
+    const m = atual(); if (!m) return; const f = b.dataset.fmt, nome = nomeArq(m); msg('Gerando…'); b.disabled = true;
+    try {
+      if (f === 'pptx') baixarLink(pptxUrl(m.id), nome + '.pptx');
+      else if (f === 'jpg') baixarLink(cheia(m.id), nome + '.jpg');
+      else if (f === 'png') baixarBlob(await comoPNG(await buscar(cheia(m.id))), nome + '.png');
+      else if (f === 'pdf') baixarBlob(await comoPDF(await buscar(cheia(m.id))), nome + '.pdf');
+      else {
+        const arq = new File([await buscar(cheia(m.id))], nome + '.jpg', { type: 'image/jpeg' });
+        if (navigator.canShare && navigator.canShare({ files: [arq] })) await navigator.share({ files: [arq], title: m.nome });
+        else baixarBlob(arq, arq.name);
+      }
+      msg(f === 'compartilhar' ? '' : f.toUpperCase() + ' baixado (pasta Downloads).');
+    } catch (e) { msg(e && e.name === 'AbortError' ? '' : 'Não deu certo: ' + (e && e.message)); }
+    b.disabled = false;
+  }));
+  $('#btLegenda').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText($('#infoLegenda').value); aviso('Legenda copiada.', 'ok', 2500); }
+    catch (e) { const t = $('#infoLegenda'); t.focus(); t.select(); aviso('Legenda selecionada: toque em Copiar no menu do teclado.', '', 4000); }
+  });
+  if (!location.hash) history.replaceState(null, '', '#/geral');
+  desenhar();
+})();
 </script>
-
 </body>
 </html>
