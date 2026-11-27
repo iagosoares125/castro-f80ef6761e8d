@@ -4,7 +4,7 @@
 @font-face{font-family:'Fira Sans';src:url(../marca/fontes/FiraSans-Bold.ttf) format('truetype');font-weight:700;font-display:swap}
 html,body{height:auto;overflow:auto;overflow-x:hidden}
 body{min-height:100dvh;background:var(--page-bg)}
-.canvas{position:relative;inset:auto;display:block;min-height:100dvh;padding:0;background:var(--bg-grad);background-attachment:fixed}
+.canvas{position:relative;z-index:1;inset:auto;display:block;min-height:100dvh;padding:0;background:transparent}
 .frame{display:block;height:auto;max-width:720px;margin:0 auto;border-radius:0;border:0;overflow:visible;background:transparent;box-shadow:none;backdrop-filter:none}
 .main{display:block}
 .view{overflow:visible;padding:14px 14px calc(92px + var(--safe-b));scroll-behavior:auto}

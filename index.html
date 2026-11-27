@@ -7,11 +7,16 @@
 <meta name="theme-color" content="#001A33">
 <title>Repositório Castro</title>
 <link rel="icon" href="marca/logos/avatar.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icones/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="css/tokens-site.css">
 <link rel="stylesheet" href="css/painel.css">
+<link rel="stylesheet" href="css/site-fundo.css">
 <link rel="stylesheet" href="css/mobile.css">
 </head>
 <body>
+<div class="bg" aria-hidden="true"><div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div><div class="bg-roofs"></div></div>
 <div class="canvas"><div class="frame"><div class="main">
   <header class="top">
     <div class="logo-m"><img src="marca/logos/avatar.png" alt=""></div>
@@ -292,6 +297,8 @@ const D = {"grupos":[["pisos","Pisos e Revestimentos"],["banheiro","Banheiro"],[
     try { await navigator.clipboard.writeText($('#infoLegenda').value); aviso('Legenda copiada.', 'ok', 2500); }
     catch (e) { const t = $('#infoLegenda'); t.focus(); t.select(); aviso('Legenda selecionada: toque em Copiar no menu do teclado.', '', 4000); }
   });
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  document.addEventListener('visibilitychange', () => document.body.classList.toggle('oculto', document.hidden));
   if (!location.hash) history.replaceState(null, '', '#/geral');
   desenhar();
 })();
